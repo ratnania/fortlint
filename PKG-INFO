@@ -1,0 +1,21 @@
+Metadata-Version: 1.0
+Name: fortlint
+Version: 0.1
+Summary: Fortran static source code analysis
+Home-page: https://github.com/ratnania/fortlint
+Author: Ahmed Ratnani 
+Author-email: ratnaniahmed@gmail.com
+License: MIT 
+Description: Fortran (2003) statis source code analysis for more secured and bug free applications
+Platform: UNIX, MACOS 
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: MIT 
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: UNIX
+Classifier: Operating System :: MacOS :: MacOS X
