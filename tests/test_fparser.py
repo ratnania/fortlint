@@ -3,6 +3,13 @@
 import re
 import os
 from fortlint.fparser import Parser
+# ...
+try:
+    from graphviz import Digraph
+    GRAPH=True
+except ImportError:
+    GRAPH=False
+# ...
 
 # ...
 def test_1(filename):
@@ -22,7 +29,8 @@ def test_1(filename):
 
 #    print (parser.text)
 
-    parser.graph.render("graph.gv", view=False)
+    if GRAPH:
+        parser.graph.render("graph.gv", view=False)
 
     filename_backup = filename+".BACKUP"
 #        filename_out    = filename
