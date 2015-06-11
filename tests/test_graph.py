@@ -73,8 +73,10 @@ def test_3():
 
     # ... convert to graphviz
     dot = g.to_graphviz()
-    dot.render('test_3.gv', view=False)
+    dot.render('test_3-dot.gv', view=False)
     # ...
+
+    g.render('test_3-g.gv', view=False)
 
     print "<<< test_3: End"
 # ...

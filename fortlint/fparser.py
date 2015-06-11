@@ -10,16 +10,9 @@ from constants import PREFIX_CONTEXT_TYPE_MODULE
 from constants import PREFIX_CONTEXT_TYPE_OBJECT
 from constants import PREFIX_CONTEXT_TYPE_GLOBAL
 from extractors import *
+from graph import Digraph
 import re
 import os
-
-# ...
-try:
-    from graphviz import Digraph
-    GRAPH=True
-except ImportError:
-    GRAPH=False
-# ...
 
 # ...
 class Parser(object):
@@ -36,9 +29,7 @@ class Parser(object):
         self._dict_names       = {}
         self._dict_constructor = dict_constructor
         self._verbose          = verbose
-        self._graph            = None
-        if GRAPH:
-            self._graph        = Digraph(comment="Fortran Parser Graph")
+        self._graph            = Digraph(comment="Fortran Parser Graph")
 
         if filename is not None:
             f = open(filename, 'r')
@@ -109,8 +100,7 @@ class Parser(object):
                     block.update_source()
 
                 # ... update Graph
-                if GRAPH:
-                    block.update_graph(self._graph)
+                block.update_graph(self._graph)
                 # ...
 
                 source = block.source

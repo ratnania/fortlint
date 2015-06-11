@@ -32,7 +32,10 @@ class Node:
     def connectedTo(self):
         return self._connectedTo
 
-    def addNeighbor(self, vertex, weight=0):
+    def addNeighbor(self, vertex, weight=0, constraint="false"):
+        """
+        TODO : insert constraint in data structure
+        """
 #        self._connectedTo[str(vertex)] = weight
         self._connectedTo[vertex] = weight
 
@@ -84,16 +87,21 @@ class Graph:
     def __contains__(self,n):
         return n in self.nodes
 
-    def edge(self, vertex_f, vertex_t, weight=0):
+    def edge(self, vertex_f, vertex_t, weight=0, constraint="false"):
         if vertex_f not in self.nodes:
-            print ("vertex_f is not defined")
-            raise()
+            self.node(vertex_f, label=vertex_f)
+#            print ("vertex_f is not defined. Given:"+vertex_f)
+#            raise()
 
         if vertex_t not in self.nodes:
-            print ("vertex_t is not defined")
-            raise()
+            self.node(vertex_t, label=vertex_t)
+#            print vertex_t
+#            print ("vertex_t is not defined. Given:"+vertex_t)
+#            raise()
 
-        self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], weight=weight)
+        self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
+                                          weight=weight, \
+                                          constraint=constraint)
 
     def getVertices(self):
         return self.nodes.keys()
@@ -119,5 +127,12 @@ class Digraph(Graph):
             print ("graphviz is not available on this machine.")
 
         return dot
+
+    def render(self, filename, view=False):
+        dot = self.to_graphviz()
+        if dot is not None:
+            dot.render(filename, view=view)
+        else:
+            print ("rendering is provided only by graphviz and is not available on this machine.")
 # ...
 

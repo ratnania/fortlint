@@ -179,7 +179,7 @@ class Block(object):
 
     def update_graph(self, graph):
         # ... add current block if it is a subroutine or a function
-        print self.color
+#        print self.color
         graph.node(self.name, label=self.name, color=self.color)
         # ...
         for key, values in self.dict_sons.items():
