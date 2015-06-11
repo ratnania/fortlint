@@ -144,3 +144,9 @@ class FunctionBlock(Block):
         Block.__init__(self, "function", TAG=TAG, source=source)
 # ...
 
+# ...
+class ModuleBlock(Block):
+    def __init__(self, TAG="", source=None):
+        Block.__init__(self, "module", TAG=TAG, source=source)
+# ...
+
