@@ -11,7 +11,9 @@ except ImportError:
 # ...
 class Node:
     def __init__(self, key, label="", color="black"):
-        self._ID = key
+        self._ID  = id(key)
+        print "*** node created with id:", self.ID
+        self._key = key
         self._connectedTo = {}
         self._color = color
         self._label = label
@@ -19,6 +21,10 @@ class Node:
     @property
     def ID(self):
         return self._ID
+
+    @property
+    def key(self):
+        return self._key
 
     @property
     def color(self):
@@ -90,14 +96,9 @@ class Graph:
     def edge(self, vertex_f, vertex_t, weight=0, constraint="false"):
         if vertex_f not in self.nodes:
             self.node(vertex_f, label=vertex_f)
-#            print ("vertex_f is not defined. Given:"+vertex_f)
-#            raise()
 
         if vertex_t not in self.nodes:
             self.node(vertex_t, label=vertex_t)
-#            print vertex_t
-#            print ("vertex_t is not defined. Given:"+vertex_t)
-#            raise()
 
         self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
                                           weight=weight, \
@@ -120,9 +121,10 @@ class Digraph(Graph):
         if GRAPH:
             dot = Digraph_graphviz(comment=self.comment)
             for node in self:
-                dot.node(node.ID, label=node.label, color=node.color)
+                print (node.ID, node.label, node.color)
+                dot.node(str(node.ID), label=node.label, color=node.color)
                 for son in node.getConnections():
-                    dot.edge(node.ID, son.ID, constraint="true")
+                    dot.edge(str(node.ID), str(son.ID), constraint="true")
         else:
             print ("graphviz is not available on this machine.")
 
