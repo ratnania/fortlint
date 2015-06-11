@@ -10,15 +10,15 @@ def getbuilddir():
 
 def bootstrap():
     try:
-        import igakit
+        import fortlint
     except ImportError:
         from os.path import dirname, abspath, join
         top_dir = abspath(join(dirname(__file__), '..'))
         build_dir = join(top_dir, getbuilddir())
         sys.path.insert(0, build_dir)
-        import igakit
+        import fortlint
         sys.stderr.write(
-            "Loaded package 'igakit' from build/ directory\n")
-    return igakit
+            "Loaded package 'fortlint' from build/ directory\n")
+    return fortlint
 
 bootstrap()
