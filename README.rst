@@ -13,4 +13,4 @@ TODO
 Contribution
 ============
 
-Everybody is welcome to contribute and upgrade the following project as long as you don't want to spend money for a commercial static code analysis.
+Everybody is welcome to contribute and upgrade the following project as long as you don't want to spend money for a commercial static code analysis tool.
