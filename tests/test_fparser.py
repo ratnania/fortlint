@@ -13,11 +13,12 @@ def test_1(filename):
     dict_constructor["subroutine"] = SubroutineBlockJorek
     dict_constructor["function"]   = FunctionBlockJorek
 
-    parser = Parser(filename=filename, dict_constructor=dict_constructor)
+    parser = Parser(filename=filename, dict_constructor=dict_constructor,
+                    verbose=1)
     source = parser.text
 
     print (parser.dict_names)
-    parser.update_variables()
+    parser.run(update_variables=True)
 
     print (parser.text)
 
@@ -35,6 +36,6 @@ def test_1(filename):
 #############################################################################
 if __name__ == "__main__":
 
-    filename = "fortran/test_1.F90"
-    test_1(filename)
+    test_1("fortran/test_1.F90")
+    test_1("fortran/test_2.F90")
 

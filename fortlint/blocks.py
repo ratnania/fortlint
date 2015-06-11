@@ -18,14 +18,17 @@ class Block(object):
     """
 
     """
-    def __init__(self, keyword, TAG="", source=None, verbose=0):
-        self._keyword   = keyword
-        self._TAG       = TAG
-        self._text      = None
-        self._source    = source
-        self._variables = None
-        self._name      = TAG
-        self._verbose   = verbose
+    def __init__(self, keyword, TAG="", source=None, verbose=0, parent=None):
+        self._keyword     = keyword
+        self._TAG         = TAG
+        self._text        = None
+        self._source      = source
+        self._variables   = None
+        self._name        = TAG
+        self._verbose     = verbose
+        self._parent      = parent
+        self._inner_calls = {}
+        self._outer_calls = {}
 
         self._re_block     = extract_blocks(self._keyword, TAG)
         self._re_signature = extract_signature()

@@ -59,51 +59,35 @@ class Parser(object):
         return self._verbose
 
     # ...
-    def update_variables(self):
+    def run(self, update_variables=True):
         source = self.text
 
         if self.verbose > 0:
             print (self.dict_names)
 
-        # ... subroutine case
-        for block_name in self.dict_names['subroutine']:
-            if self.verbose > 0:
-                print (">>>>> block_name:" + block_name)
-#            print "-------------------------------------------------"
-#            print source
-#            print "-------------------------------------------------"
+        for key, values in self.dict_names.items():
+            keyword = key
 
-            block =  self.dict_constructor["subroutine"](TAG=block_name, source=source)
-            block.get_signature()
-            block.get_arguments()
-            block.parse_variables()
-            for var in block.variables:
-                block.replace_variable(var)
-            block.update_source()
+            for block_name in values:
+                is_modified = False
 
-            source = block.source
-#            print "+++++++++++++++++++++++++++++++++++++++++++++++++"
-#            print source
-#            print "+++++++++++++++++++++++++++++++++++++++++++++++++"
-        # ...
+                if self.verbose > 0:
+                    print (">>>>> block_name:" + block_name)
 
-        # ... subroutine case
-        for block_name in self.dict_names['function']:
-            if self.verbose > 0:
-                print (">>>>> block_name:"+ block_name)
-            block = self.dict_constructor["function"](TAG=block_name, source=source)
-            block.get_signature()
-            block.get_arguments()
-            block.parse_variables()
-            for var in block.variables:
-                block.replace_variable(var)
-            block.update_source()
+                constructor = self.dict_constructor[keyword]
+                block = constructor(TAG=block_name, source=source)
+                block.get_signature()
+                block.get_arguments()
+                block.parse_variables()
+                if update_variables:
+                    for var in block.variables:
+                        block.replace_variable(var)
+                    is_modified = True
 
-            source = block.source
-#            print "+++++++++++++++++++++++++++++++++++++++++++++++++"
-#            print block.source
-#            print "+++++++++++++++++++++++++++++++++++++++++++++++++"
-        # ...
+                if is_modified:
+                    block.update_source()
+
+                source = block.source
 
         self._text = source
 # ...
