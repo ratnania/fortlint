@@ -20,7 +20,9 @@ def test_1(filename):
     print (parser.dict_names)
     parser.run(update_variables=True)
 
-    print (parser.text)
+#    print (parser.text)
+
+    parser.graph.render("graph.gv", view=False)
 
     filename_backup = filename+".BACKUP"
 #        filename_out    = filename
@@ -36,6 +38,7 @@ def test_1(filename):
 #############################################################################
 if __name__ == "__main__":
 
-    test_1("fortran/test_1.F90")
-    test_1("fortran/test_2.F90")
+#    test_1("fortran/test_1.F90")
+#    test_1("fortran/test_2.F90")
+    test_1("fortran/test_3.F90")
 

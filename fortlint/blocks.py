@@ -18,17 +18,24 @@ class Block(object):
     """
 
     """
-    def __init__(self, keyword, TAG="", source=None, verbose=0, parent=None):
+    def __init__(self, keyword, \
+                 TAG="", source=None, \
+                 verbose=0, \
+                 ancestor=None, color=None):
+
         self._keyword     = keyword
         self._TAG         = TAG
         self._text        = None
         self._source      = source
         self._variables   = None
         self._name        = TAG
+        self._description = None
         self._verbose     = verbose
-        self._parent      = parent
-        self._inner_calls = {}
-        self._outer_calls = {}
+        self._dict_sons   = {}
+        self._ancestor    = ancestor
+        self._color       = color
+        if color is None:
+            self.set_color()
 
         self._re_block     = extract_blocks(self._keyword, TAG)
         self._re_signature = extract_signature()
@@ -41,6 +48,10 @@ class Block(object):
     @property
     def name(self):
         return self._name
+
+    @property
+    def description(self):
+        return self._description
 
     @property
     def text(self):
@@ -68,6 +79,20 @@ class Block(object):
     @property
     def verbose(self):
         return self._verbose
+
+    @property
+    def dict_sons(self):
+        return self._dict_sons
+
+    @property
+    def ancestor(self):
+        return self._ancestor
+
+    @property
+    def color(self):
+        if self._color is None:
+            self.set_color()
+        return self._color
 
     def set_source(self, source):
         self._source = source
@@ -112,6 +137,16 @@ class Block(object):
         self._arguments = [b.rstrip() for b in data if len(b) > 0]
         return self._arguments
 
+    def get_sons(self):
+        """
+        TODO : add functions
+        """
+        _re = extract_subroutine_call()
+        self._dict_sons["subroutine"] = _re.findall(self.text)
+
+        _re = extract_function_call()
+        self._dict_sons["function"] = _re.findall(self.text)
+
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
             print ("parse_variables: a constructor must be provided. Received None")
@@ -133,6 +168,27 @@ class Block(object):
     def update_source(self):
         print ("update_source: not yet implemented for the generic class")
         raise()
+
+    def set_color(self):
+        if self.keyword == "module":
+            self._color = "red"
+        if self.keyword == "subroutine":
+            self._color = "blue"
+        if self.keyword == "function":
+            self._color = "green"
+
+    def update_graph(self, graph):
+        # ... add current block if it is a subroutine or a function
+        print self.color
+        graph.node(self.name, label=self.name, color=self.color)
+        # ...
+        for key, values in self.dict_sons.items():
+            keyword = key
+
+            for data in values:
+#                graph.edge(self.name, data, constraint="false")
+                graph.edge(self.name, data, constraint="true")
+
 # ...
 
 # ...

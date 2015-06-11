@@ -12,18 +12,24 @@ from constants import PREFIX_CONTEXT_TYPE_GLOBAL
 from extractors import *
 import re
 import os
+from graphviz import Digraph
 
 # ...
 class Parser(object):
+    """
+    Python Class for Fortran language parser
+    """
     def __init__(self, filename=None, dirname=None, \
                 dict_constructor=None, \
                 verbose=0):
-        self._filename = filename
-        self._dirname  = dirname
-        self._text     = None
-        self._dict_names = {}
+
+        self._filename         = filename
+        self._dirname          = dirname
+        self._text             = None
+        self._dict_names       = {}
         self._dict_constructor = dict_constructor
-        self._verbose   = verbose
+        self._verbose          = verbose
+        self._graph            = Digraph(comment="Fortran Parser Graph")
 
         if filename is not None:
             f = open(filename, 'r')
@@ -58,6 +64,10 @@ class Parser(object):
     def verbose(self):
         return self._verbose
 
+    @property
+    def graph(self):
+        return self._graph
+
     # ...
     def run(self, update_variables=True):
         source = self.text
@@ -76,8 +86,10 @@ class Parser(object):
 
                 constructor = self.dict_constructor[keyword]
                 block = constructor(TAG=block_name, source=source)
+                block.get_code()
                 block.get_signature()
                 block.get_arguments()
+                block.get_sons()
                 block.parse_variables()
                 if update_variables:
                     for var in block.variables:
@@ -86,6 +98,10 @@ class Parser(object):
 
                 if is_modified:
                     block.update_source()
+
+                # ... update Graph
+                block.update_graph(self._graph)
+                # ...
 
                 source = block.source
 

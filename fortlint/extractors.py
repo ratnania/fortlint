@@ -70,3 +70,21 @@ def get_names_function(text_in):
             list_names.append(list_d[0])
     return list_names
 # ...
+
+# ...
+def extract_subroutine_call():
+    pattern = r"\bcall\s+(\w+)\("
+    word_re = re.compile(pattern)
+    return word_re
+# ...
+
+# ...
+def extract_function_call():
+    pattern = r"\b(\w+)\("
+    word_re = re.compile(pattern)
+    return word_re
+# ...
+
+
+
+

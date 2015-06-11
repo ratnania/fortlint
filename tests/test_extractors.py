@@ -19,6 +19,8 @@ source_subroutine = \
 
       ii = xx
 
+      CALL my_other_sub(xx)
+
       RETURN
    END SUBROUTINE my_sub2
 """
@@ -93,11 +95,28 @@ def test_extract_module(source):
         print ("")
 # ...
 
+# ...
+def test_extract_subroutine_call(source):
+    keyword = "subroutine"
+    _re = extract_blocks(keyword, "my_sub2")
+    r = _re.findall(source.lower())[0]
+
+    _re = extract_subroutine_call()
+    r = _re.findall(r)[0]
+
+    if PRINT :
+        print (">>> extract " + keyword)
+        print (r)
+        print ("")
+# ...
+
+
 
 
 #############################################################################
 if __name__ == "__main__":
-    test_extract_subroutine(source_subroutine)
-    test_extract_function(source_function)
-    test_extract_module(source_module_1)
-    test_extract_module(source_module_2)
+#    test_extract_subroutine(source_subroutine)
+#    test_extract_function(source_function)
+#    test_extract_module(source_module_1)
+#    test_extract_module(source_module_2)
+    test_extract_subroutine_call(source_subroutine)
