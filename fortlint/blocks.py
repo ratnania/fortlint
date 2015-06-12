@@ -253,7 +253,12 @@ class Block(object):
         graph = root.graph
 
 #        print self.color
-        graph.node(self)
+        attributs = {}
+        attributs["constraint"] = "true"
+        attributs["style"]      = "solid"
+        attributs["label"]      = self.label
+
+        graph.node(self, attributs=attributs)
 
         # ... add edges / nodes for functions/subroutines contains
         for key, values in self.dict_names.items():
@@ -262,7 +267,12 @@ class Block(object):
             for name in values:
 #                print ("+++ name:", name)
                 other = root.get_block_by_name(name)
-                graph.edge(self, other, constraint="true", style="dashed")
+
+                attributs = {}
+                attributs["constraint"] = "true"
+                attributs["style"]      = "dashed"
+
+                graph.edge(self, other, attributs=attributs)
         # ...
 
         # ... add edges / nodes for functions/subroutines calls
@@ -272,7 +282,12 @@ class Block(object):
             for name in values:
 #                print ("+++ name:", name)
                 other = root.get_block_by_name(name)
-                graph.edge(self, other, constraint="true")
+
+                attributs = {}
+                attributs["constraint"] = "true"
+                attributs["style"]      = "solid"
+
+                graph.edge(self, other, attributs=attributs)
         # ...
 
 # ...

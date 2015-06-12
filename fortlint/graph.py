@@ -10,29 +10,12 @@ except ImportError:
 
 # ...
 class Node:
-    def __init__(self, key, label=None, color=None):
+    def __init__(self, key, attributs={}):
         self._ID  = id(key)
-#        print "*** node created with id:", self.ID
+#        print "*** node created with id:", self.ID, attributs
         self._key = key
+        self._dict_attributs = attributs
         self._connectedTo = {}
-        self._color = color
-        self._label = label
-
-        try:
-            self._label = self.key.label
-        except:
-            if label is None:
-                self._label = self.ID
-            else:
-                self._label = label
-
-        try:
-            self._color = self.key.color
-        except:
-            if color is None:
-                self._color = "black"
-            else:
-                self._color = color
 
     @property
     def ID(self):
@@ -43,27 +26,73 @@ class Node:
         return self._key
 
     @property
-    def color(self):
-        return self._color
+    def label(self):
+        try:
+            value = self.attributs["label"]
+        except:
+            value = None
+
+        if value is None:
+            self.init_label()
 
     @property
-    def label(self):
-        return self._label
+    def color(self):
+        try:
+            value = self.attributs["color"]
+        except:
+            value = None
+
+        if value is None:
+            self.init_color()
 
     @property
     def connectedTo(self):
         return self._connectedTo
 
-    def addNeighbor(self, vertex, weight=0, constraint="false", style="solid"):
+    @property
+    def attributs(self):
+        return self._dict_attributs
+
+    def set_attribut(self, key, value):
+#        print "++++++ set_attribut with :", key, value
+        self._dict_attributs[key] = value
+
+    def set_label(self, value):
+        self.set_attribut("label", value)
+
+    def set_color(self, value):
+        self.set_attribut("color", value)
+
+    def init_label(self):
+        try:
+            value = self.attributs["label"]
+        except:
+            value = None
+
+        if value is None:
+            self.set_label(self.key.label)
+
+    def init_color(self):
+        try:
+            value = self.attributs["color"]
+        except:
+            value = None
+
+        if value is None:
+            try:
+                self.set_color(self.key.color)
+            except:
+                self.set_color("black")
+
+    def update_attributs(self):
+        self.init_color()
+        self.init_label()
+
+    def addNeighbor(self, vertex, attributs={}):
         """
-        TODO : insert constraint in data structure
         """
-        data = {}
-        data['weight']     = weight
-        data['constraint'] = constraint
-        data['style']      = style
         if vertex not in self.connectedTo:
-            self._connectedTo[vertex] = data
+            self._connectedTo[vertex] = attributs
 
     def __str__(self):
 #        return str(self.ID) + ' connectedTo: ' + str([x.ID for x in self.connectedTo])
@@ -115,25 +144,21 @@ class Graph:
         return n in self.nodes
 
     def edge(self, vertex_f, vertex_t, \
-             weight=0, constraint="false", style="solid"):
-        if vertex_f not in self.nodes:
-#            print ("create new vertex_f :", vertex_f)
-            try:
-                self.node(vertex_f, label=vertex_f.label)
-            except:
-                self.node(vertex_f, label=vertex_f)
+             attributs={}):
 
-        if vertex_t not in self.nodes:
-#            print ("create new vertex_t :", vertex_t)
-            try:
-                self.node(vertex_t, label=vertex_t.label)
-            except:
-                self.node(vertex_t, label=vertex_t)
+        for vertex in [vertex_f, vertex_t]:
+            if vertex not in self.nodes:
+#                print "---- create new vertex :", vertex, vertex.label
+                v_attributs = {}
+                try:
+                    v_attributs["label"] = vertex.label
+                except:
+                    v_attributs["label"] = vertex
+
+                self.node(vertex, attributs=v_attributs)
 
         self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
-                                          weight=weight, \
-                                          constraint=constraint, \
-                                          style=style)
+                                          attributs=attributs)
 
     def getVertices(self):
         return self.nodes.keys()
@@ -152,10 +177,10 @@ class Digraph(Graph):
         if GRAPH:
             dot = Digraph_graphviz(comment=self.comment)
             for node in self:
-#                print (node.ID, node.label, node.color)
-                dot.node(str(node.ID), \
-                         label=str(node.label), \
-                         color=str(node.color))
+
+                node.update_attributs()
+#                print (node.ID, node.attributs)
+                dot.node(str(node.ID), **node.attributs)
 
             for node in self:
                 for key, values in node.connectedTo.items():
@@ -164,10 +189,7 @@ class Digraph(Graph):
                     son = key
                     attr = values
 #                    print ("XXXXX son :", son, " attr :", attr)
-                    dot.edge(str(node.ID), str(son.ID), \
-                             constraint=attr["constraint"], \
-#                             weight=attr["weight"] \
-                             style=attr["style"] )
+                    dot.edge(str(node.ID), str(son.ID), **attr)
         else:
             print ("graphviz is not available on this machine.")
 
