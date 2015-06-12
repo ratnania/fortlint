@@ -108,14 +108,21 @@ class Node:
 
 # ...
 class Graph:
-    def __init__(self, comment=""):
+    def __init__(self, name="", comment=""):
         self._nodes = {}
         self._numVertices = 0
+        self._name  = name
         self._comment = comment
+        self._list_subgraph = []
+        self._node_attributs = None
 
     @property
     def nodes(self):
         return self._nodes
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def comment(self):
@@ -124,6 +131,17 @@ class Graph:
     @property
     def numVertices(self):
         return self._numVertices
+
+    @property
+    def subgraphs(self):
+        return self._list_subgraph
+
+    @property
+    def node_attributs(self):
+        return self._node_attributs
+
+    def set_node_attributs(self, attributs):
+        self._node_attributs = attributs
 
     def node(self, *args, **kwargs):
         self._numVertices = self._numVertices + 1
@@ -163,6 +181,9 @@ class Graph:
     def getVertices(self):
         return self.nodes.keys()
 
+    def add_subgraph(self, sub):
+        self._list_subgraph.append(sub)
+
     def __iter__(self):
         return iter(self.nodes.values())
 # ...
@@ -175,27 +196,57 @@ class Digraph(Graph):
     def to_graphviz(self):
         dot = None
         if GRAPH:
-            dot = Digraph_graphviz(comment=self.comment)
-            for node in self:
+            print ">>>> name :", self.name
+            dot = Digraph_graphviz(self.name, comment=self.comment, filename='cluster.gv')
 
+            # ... insert subgraphs
+            list_colors = ["gray", "yellow", "white", "blue", "green"]
+            i = 0
+            for sub in self.subgraphs:
+                label = '"process ' + str(i) + '"'
+
+                print "+++++"
+                _sub = sub.to_graphviz()
+                print "-----"
+
+                _sub.body.append('style=filled')
+                _sub.body.append('color=lightgrey')
+                _sub.body.append('label = ' + label)
+
+#                _sub.node_attr.update(style='filled', color=list_colors[i])
+
+                dot.subgraph(_sub)
+                i += 1
+            # ...
+
+            # ... insert nodes
+            for node in self:
                 node.update_attributs()
 #                print (node.ID, node.attributs)
                 dot.node(str(node.ID), **node.attributs)
+#                dot.node(str(node.ID)[::-1][:2])
+            # ...
 
+            # ... insert edges
             for node in self:
                 for key, values in node.connectedTo.items():
-#                for son in node.getConnections():
-
                     son = key
                     attr = values
 #                    print ("XXXXX son :", son, " attr :", attr)
                     dot.edge(str(node.ID), str(son.ID), **attr)
+#                    dot.edge(str(node.ID)[::-1][:2], str(son.ID)[::-1][:2])
+            # ...
+
+            print dot
+
+#            dot.node('start', shape='Mdiamond')
+#            dot.node('end', shape='Msquare')
         else:
             print ("graphviz is not available on this machine.")
 
         return dot
 
-    def render(self, filename, view=False):
+    def render(self, filename=None, view=False):
         dot = self.to_graphviz()
         if dot is not None:
             dot.render(filename, view=view)

@@ -32,7 +32,8 @@ def test_1(filename):
 #    print (parser.text)
 
     if GRAPH:
-        parser.graph.render("graph.gv", view=False)
+        parser.graph.render(view=False)
+#        parser.graph.render("graph.gv", view=False)
 
     filename_backup = filename+".BACKUP"
 #        filename_out    = filename

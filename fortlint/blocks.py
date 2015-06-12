@@ -10,6 +10,7 @@ from constants import PREFIX_CONTEXT_TYPE_MODULE
 from constants import PREFIX_CONTEXT_TYPE_OBJECT
 from constants import PREFIX_CONTEXT_TYPE_GLOBAL
 from extractors import *
+from graph import Digraph
 import re
 import os
 
@@ -250,11 +251,14 @@ class Block(object):
 
     def update_graph(self, root):
         # ... add current block if it is a subroutine or a function
-        graph = root.graph
+        if self.contains:
+            graph = Digraph(name=self.name)
+        else:
+            graph = root.graph
 
 #        print self.color
         attributs = {}
-        attributs["constraint"] = "true"
+#        attributs["constraint"] = "true"
         attributs["style"]      = "solid"
         attributs["label"]      = self.label
 
@@ -269,7 +273,7 @@ class Block(object):
                 other = root.get_block_by_name(name)
 
                 attributs = {}
-                attributs["constraint"] = "true"
+#                attributs["constraint"] = "true"
                 attributs["style"]      = "dashed"
 
                 graph.edge(self, other, attributs=attributs)
@@ -284,12 +288,16 @@ class Block(object):
                 other = root.get_block_by_name(name)
 
                 attributs = {}
-                attributs["constraint"] = "true"
+#                attributs["constraint"] = "true"
                 attributs["style"]      = "solid"
 
                 graph.edge(self, other, attributs=attributs)
         # ...
 
+        # ... update root graph with subgraph
+        if self.contains:
+            root.graph.add_subgraph(graph)
+        # ...
 # ...
 
 # ...

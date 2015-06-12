@@ -29,7 +29,7 @@ class Parser(object):
         self._dict_names       = {}
         self._dict_constructor = dict_constructor
         self._verbose          = verbose
-        self._graph            = Digraph(comment="Fortran Parser Graph")
+        self._graph            = Digraph(name="root")
         self._list_block       = []
 
         if filename is not None:
