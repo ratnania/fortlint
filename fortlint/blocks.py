@@ -251,10 +251,11 @@ class Block(object):
 
     def update_graph(self, root):
         # ... add current block if it is a subroutine or a function
+        graph = root.graph
+        decl_graph = graph
         if self.contains:
-            graph = Digraph(name=self.name)
-        else:
-            graph = root.graph
+            subgraph   = Digraph(name=self.name)
+            decl_graph = subgraph
 
 #        print self.color
         attributs = {}
@@ -262,9 +263,9 @@ class Block(object):
         attributs["style"]      = "solid"
         attributs["label"]      = self.label
 
-        graph.node(self, attributs=attributs)
+#        graph.node(self, attributs=attributs)
 
-        # ... add edges / nodes for functions/subroutines contains
+        # ... add edges / nodes for functions/subroutines declarations
         for key, values in self.dict_names.items():
             keyword = key
 
@@ -276,7 +277,7 @@ class Block(object):
 #                attributs["constraint"] = "true"
                 attributs["style"]      = "dashed"
 
-                graph.edge(self, other, attributs=attributs)
+                decl_graph.edge(self, other, attributs=attributs)
         # ...
 
         # ... add edges / nodes for functions/subroutines calls
@@ -296,7 +297,7 @@ class Block(object):
 
         # ... update root graph with subgraph
         if self.contains:
-            root.graph.add_subgraph(graph)
+            graph.add_subgraph(subgraph)
         # ...
 # ...
 
