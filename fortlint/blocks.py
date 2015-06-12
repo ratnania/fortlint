@@ -224,12 +224,14 @@ class Block(object):
             list_code = _re.split(self.text)
 #            print len(list_code)
 #            print list_code
-            source = ''.join(list_code[1:])
-            self._dict_names['subroutine'] = get_names_subroutine(source)
-            self._dict_names['function']   = get_names_function(source)
-            self._dict_names['module']     = get_names_module(source)
-
 #            print "XXXXXXXXXXXXXXXXXXXXXXXXXX ", self.keyword, self.name
+            source = ''.join(list_code[1:])
+#            print source
+            self._dict_names['subroutine'] = get_names_subroutine(source.lower())
+            self._dict_names['function']   = get_names_function(source.lower())
+            self._dict_names['module']     = get_names_module(source.lower())
+
+#            print self.dict_names
 
             # ...
             for key, values in self.dict_names.items():
@@ -242,7 +244,7 @@ class Block(object):
                     other = root.get_block_by_name(name)
                     other._label = self.label + " % "+ other.label
 #                    if self.keyword == "module":
-#                        print ("--- new label :", other.label)
+#                    print ("--- new label :", other.label)
             # ...
 
 
