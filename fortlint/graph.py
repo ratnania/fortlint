@@ -54,15 +54,20 @@ class Node:
     def connectedTo(self):
         return self._connectedTo
 
-    def addNeighbor(self, vertex, weight=0, constraint="false"):
+    def addNeighbor(self, vertex, weight=0, constraint="false", style="solid"):
         """
         TODO : insert constraint in data structure
         """
-#        self._connectedTo[str(vertex)] = weight
-        self._connectedTo[vertex] = weight
+        data = {}
+        data['weight']     = weight
+        data['constraint'] = constraint
+        data['style']      = style
+        if vertex not in self.connectedTo:
+            self._connectedTo[vertex] = data
 
     def __str__(self):
-        return str(self.ID) + ' connectedTo: ' + str([x.ID for x in self.connectedTo])
+#        return str(self.ID) + ' connectedTo: ' + str([x.ID for x in self.connectedTo])
+        return ""
 
     def getConnections(self):
         return self.connectedTo.keys()
@@ -109,7 +114,8 @@ class Graph:
     def __contains__(self,n):
         return n in self.nodes
 
-    def edge(self, vertex_f, vertex_t, weight=0, constraint="false"):
+    def edge(self, vertex_f, vertex_t, \
+             weight=0, constraint="false", style="solid"):
         if vertex_f not in self.nodes:
 #            print ("create new vertex_f :", vertex_f)
             try:
@@ -126,7 +132,8 @@ class Graph:
 
         self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
                                           weight=weight, \
-                                          constraint=constraint)
+                                          constraint=constraint, \
+                                          style=style)
 
     def getVertices(self):
         return self.nodes.keys()
@@ -151,8 +158,16 @@ class Digraph(Graph):
                          color=str(node.color))
 
             for node in self:
-                for son in node.getConnections():
-                    dot.edge(str(node.ID), str(son.ID), constraint="true")
+                for key, values in node.connectedTo.items():
+#                for son in node.getConnections():
+
+                    son = key
+                    attr = values
+                    print ("XXXXX son :", son, " attr :", attr)
+                    dot.edge(str(node.ID), str(son.ID), \
+                             constraint=attr["constraint"], \
+#                             weight=attr["weight"] \
+                             style=attr["style"] )
         else:
             print ("graphviz is not available on this machine.")
 

@@ -200,10 +200,8 @@ class Block(object):
 
     def update_label(self, root):
         if not self.contains:
-            print ("NOOOOOOOOOOON")
             return
         else:
-            print ("coucou")
             _re = extract_contains()
 
             list_code = _re.split(self.text)
@@ -218,10 +216,10 @@ class Block(object):
                 keyword = key
 
                 for name in values:
-                    print ("+++ name:", name)
+#                    print ("+++ name:", name)
                     other = root.get_block_by_name(name)
                     other._label = self.label + " % "+ other.label
-                    print ("--- new label :", other.label)
+#                    print ("--- new label :", other.label)
             # ...
 
 
@@ -231,7 +229,18 @@ class Block(object):
 
 #        print self.color
         graph.node(self)
+
+        # ... add edges / nodes for functions/subroutines contains
+        for key, values in self.dict_names.items():
+            keyword = key
+
+            for name in values:
+                print ("+++ name:", name)
+                other = root.get_block_by_name(name)
+                graph.edge(self, other, constraint="true", style="dashed")
         # ...
+
+        # ... add edges / nodes for functions/subroutines calls
         for key, values in self.dict_sons.items():
             keyword = key
 
@@ -239,6 +248,8 @@ class Block(object):
 #                print ("+++ name:", name)
                 other = root.get_block_by_name(name)
                 graph.edge(self, other, constraint="true")
+        # ...
+
 # ...
 
 # ...
