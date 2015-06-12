@@ -38,6 +38,7 @@ class Parser(object):
             self._text = progtext.lower()
             f.close()
 
+            self._dict_names['module']     = get_names_module(self.text)
             self._dict_names['subroutine'] = get_names_subroutine(self.text)
             self._dict_names['function']   = get_names_function(self.text)
 
@@ -114,24 +115,26 @@ class Parser(object):
                 if self.verbose > 0:
                     print (">>>>> block_name:" + block_name)
 
-                constructor = self.dict_constructor[keyword]
-                block = constructor(TAG=block_name, source=source)
-                block.get_code()
-                block.get_signature()
-                block.get_arguments()
-                block.get_sons()
-                block.parse_variables()
-                if update_variables:
-                    for var in block.variables:
-                        block.replace_variable(var)
-                    is_modified = True
+                if len(block_name) > 0:
+                    constructor = self.dict_constructor[keyword]
+                    block = constructor(TAG=block_name, source=source)
+                    block.get_code()
+                    if block.is_valid:
+                        block.get_signature()
+                        block.get_arguments()
+                        block.get_sons()
+                        block.parse_variables()
+                        if update_variables:
+                            for var in block.variables:
+                                block.replace_variable(var)
+                            is_modified = True
 
-                if is_modified:
-                    block.update_source()
+                        if is_modified:
+                            block.update_source()
 
-                # ... append block in the blocks list
-                self.append(block)
-                # ...
+                        # ... append block in the blocks list
+                        self.append(block)
+                        # ...
 
                 source = block.source
         self._text = source

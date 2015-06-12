@@ -15,8 +15,10 @@ except ImportError:
 def test_1(filename):
     from fortlint.coding_style import SubroutineBlockJorek
     from fortlint.coding_style import FunctionBlockJorek
+    from fortlint.coding_style import ModuleBlockJorek
 
     dict_constructor = {}
+    dict_constructor["module"]     = ModuleBlockJorek
     dict_constructor["subroutine"] = SubroutineBlockJorek
     dict_constructor["function"]   = FunctionBlockJorek
 
@@ -25,7 +27,7 @@ def test_1(filename):
     source = parser.text
 
     print (parser.dict_names)
-    parser.run(update_variables=True)
+    parser.run(update_variables=False)
 
 #    print (parser.text)
 
@@ -49,5 +51,6 @@ if __name__ == "__main__":
 #    test_1("fortran/test_1.F90")
 #    test_1("fortran/test_2.F90")
 #    test_1("fortran/test_3.F90")
-    test_1("fortran/test_4.F90")
+#    test_1("fortran/test_4.F90")
+    test_1("fortran/test_5.F90")
 

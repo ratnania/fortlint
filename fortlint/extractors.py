@@ -72,6 +72,27 @@ def get_names_function(text_in):
 # ...
 
 # ...
+def get_names_module(text_in):
+    # ... find module names
+    keyword = "module"
+    pattern = r"\b" + keyword + r"\b.*"
+    word_re = re.compile(pattern)
+    text = word_re.findall(text_in)
+#    print ("+++++ text :", text)
+    list_names = []
+    for t in text:
+        list_s = [s for s in t.split(keyword) if len(s) > 0]
+#        print ("++ list_s :", list_s)
+        for s in list_s:
+            list_d = [d.rstrip().lstrip() for d in s.split("(") if len(d) > 0]
+            list_names.append(list_d[0])
+    set_names = set(list_names)
+    list_names = list(set_names)
+#    print ("+++++ modules-names :", list_names)
+    return list_names
+# ...
+
+# ...
 def extract_subroutine_call():
     pattern = r"\bcall\s+(\w+)\("
     word_re = re.compile(pattern)

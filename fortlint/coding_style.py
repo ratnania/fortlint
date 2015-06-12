@@ -15,6 +15,7 @@ from declaration import Variable
 from blocks import Block
 from blocks import SubroutineBlock
 from blocks import FunctionBlock
+from blocks import ModuleBlock
 
 # ...
 list_keywords_decs = ['integer', 'real', 'type', 'class']
@@ -124,5 +125,11 @@ class SubroutineBlockJorek(BlockJorek, SubroutineBlock):
 class FunctionBlockJorek(BlockJorek, FunctionBlock):
     def __init__(self, TAG="", source=None):
         BlockJorek.__init__(self, "function", TAG=TAG, source=source)
+# ...
+
+# ...
+class ModuleBlockJorek(BlockJorek, ModuleBlock):
+    def __init__(self, TAG="", source=None):
+        BlockJorek.__init__(self, "module", TAG=TAG, source=source)
 # ...
 

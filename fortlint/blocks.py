@@ -37,6 +37,7 @@ class Block(object):
         self._ancestor    = ancestor
         self._color       = color
         self._contains    = None
+        self._is_valid    = False
 
         if color is None:
             self.set_color()
@@ -115,24 +116,33 @@ class Block(object):
             self._contains = (len(_re.findall(self.text)) > 0)
         return self._contains
 
+    @property
+    def is_valid(self):
+        return self._is_valid
+
     def set_source(self, source):
         self._source = source
 
     def get_code(self):
         if self.text is None:
             if self.source is not None:
+                n = len(self._re_block.split(self.source))
+                if n > 1:
+                    self._is_valid = True
+
 #                print "==========================="
-#                n = len(self._re_block.split(self.source))
 #                for i in range(0,n):
 #                    print ">>>>>", self._re_block.split(self.source)[i]
 #                print n
 #                print "==========================="
-                try:
-                    self._text = self._re_block.findall(self.source)[0]
-                except:
-                    print ("Cannot parse the source code")
-                    print (self.source)
-                    raise()
+
+                if self.is_valid:
+                    try:
+                        self._text = self._re_block.findall(self.source)[0]
+                    except:
+                        print ("Cannot parse the source code")
+    #                    print (self.source)
+                        raise()
 #                print ">>> text:", self.text
             else:
                 print ("you must provide the source code before parsing")
@@ -217,16 +227,22 @@ class Block(object):
             source = ''.join(list_code[1:])
             self._dict_names['subroutine'] = get_names_subroutine(source)
             self._dict_names['function']   = get_names_function(source)
+            self._dict_names['module']     = get_names_module(source)
+
+#            print "XXXXXXXXXXXXXXXXXXXXXXXXXX ", self.keyword, self.name
 
             # ...
             for key, values in self.dict_names.items():
                 keyword = key
+#                print "****** ",  key, values
 
                 for name in values:
-#                    print ("+++ name:", name)
+#                    if self.keyword == "module":
+#                        print ("+++ name:", name)
                     other = root.get_block_by_name(name)
                     other._label = self.label + " % "+ other.label
-#                    print ("--- new label :", other.label)
+#                    if self.keyword == "module":
+#                        print ("--- new label :", other.label)
             # ...
 
 
