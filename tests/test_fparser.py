@@ -52,5 +52,6 @@ if __name__ == "__main__":
 #    test_1("fortran/test_2.F90")
 #    test_1("fortran/test_3.F90")
 #    test_1("fortran/test_4.F90")
-    test_1("fortran/test_5.F90")
+#    test_1("fortran/test_5.F90")
+    test_1("fortran/test_6.F90")
 
