@@ -162,11 +162,18 @@ class Block(object):
         """
         TODO : add functions
         """
+        source = self.text
+        if self.contains:
+            _re = extract_contains()
+
+            list_code = _re.split(self.text)
+            source = ''.join(list_code[0])
+
         _re = extract_subroutine_call()
-        self._dict_sons["subroutine"] = _re.findall(self.text)
+        self._dict_sons["subroutine"] = _re.findall(source)
 
         _re = extract_function_call()
-        self._dict_sons["function"] = _re.findall(self.text)
+        self._dict_sons["function"] = _re.findall(source)
 
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
@@ -235,7 +242,7 @@ class Block(object):
             keyword = key
 
             for name in values:
-                print ("+++ name:", name)
+#                print ("+++ name:", name)
                 other = root.get_block_by_name(name)
                 graph.edge(self, other, constraint="true", style="dashed")
         # ...

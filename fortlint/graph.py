@@ -152,7 +152,7 @@ class Digraph(Graph):
         if GRAPH:
             dot = Digraph_graphviz(comment=self.comment)
             for node in self:
-                print (node.ID, node.label, node.color)
+#                print (node.ID, node.label, node.color)
                 dot.node(str(node.ID), \
                          label=str(node.label), \
                          color=str(node.color))
@@ -163,7 +163,7 @@ class Digraph(Graph):
 
                     son = key
                     attr = values
-                    print ("XXXXX son :", son, " attr :", attr)
+#                    print ("XXXXX son :", son, " attr :", attr)
                     dot.edge(str(node.ID), str(son.ID), \
                              constraint=attr["constraint"], \
 #                             weight=attr["weight"] \
