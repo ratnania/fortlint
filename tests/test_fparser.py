@@ -27,7 +27,7 @@ def test_1(filename):
     source = parser.text
 
     print (parser.dict_names)
-    parser.run(update_variables=True)
+    parser.run(update_variables=False)
 
 #    print (parser.text)
 

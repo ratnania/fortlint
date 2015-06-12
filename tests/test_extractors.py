@@ -32,6 +32,7 @@ source_function = \
       REAL :: xx
 
       xx = xx + 1.0
+      CALL my_func(xx, xx)
 
       RETURN
    END FUNCTION my_func3
@@ -53,7 +54,10 @@ source_module_2 = \
 """
    MODULE    my_module4
    IMPLICIT NONE
-      REAL :: xx
+      REAL :: alpha
+
+      s = my_func(s)
+      CALL my_sub33()
 
       CONTAINS
 """ \
@@ -61,6 +65,9 @@ source_module_2 = \
 """
    END MODULE my_module4
 """
+
+f = open("fortran/test_6.F90", "r")
+source_test_6 = f.read()
 
 # ...
 def test_extract_subroutine(source):
@@ -125,6 +132,20 @@ def test_extract_module_contains(source):
         print ("")
 # ...
 
+# ...
+def test_extract_module_contains2(source):
+    keyword = "module"
+    _re = extract_blocks(keyword, "my_mod_1")
+    source = _re.findall(source.lower())[0]
+
+    dict_decl, dict_call = get_declarations_calls(source)
+
+    if PRINT :
+        print (">>> extract " + keyword)
+        print (">>> dict_decl :", dict_decl)
+        print (">>> dict_call :", dict_call)
+        print ("")
+# ...
 
 
 
@@ -136,4 +157,5 @@ if __name__ == "__main__":
 #    test_extract_module(source_module_1)
 #    test_extract_module(source_module_2)
 #    test_extract_subroutine_call(source_subroutine)
-    test_extract_module_contains(source_module_2)
+#    test_extract_module_contains(source_module_2)
+    test_extract_module_contains2(source_test_6)

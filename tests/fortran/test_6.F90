@@ -4,6 +4,10 @@
 
           implicit none
 
+          CALL my_sub(w,a)
+          CALL my_sub2(w,w,a)
+          f = my_func3(a)
+
         contains
 
                 ! ..............................
