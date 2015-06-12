@@ -29,6 +29,7 @@ class Block(object):
         self._source      = source
         self._variables   = None
         self._name        = TAG
+        self._label       = None
         self._description = None
         self._verbose     = verbose
         self._dict_sons   = {}
@@ -44,6 +45,12 @@ class Block(object):
     @property
     def keyword(self):
         return self._keyword
+
+    @property
+    def label(self):
+        if self._label is None:
+            self._label = self.name
+        return self._label
 
     @property
     def name(self):
@@ -177,18 +184,20 @@ class Block(object):
         if self.keyword == "function":
             self._color = "green"
 
-    def update_graph(self, graph):
+    def update_graph(self, root):
         # ... add current block if it is a subroutine or a function
+        graph = root.graph
+
 #        print self.color
-        graph.node(self.name, label=self.name, color=self.color)
+        graph.node(self)
         # ...
         for key, values in self.dict_sons.items():
             keyword = key
 
-            for data in values:
-#                graph.edge(self.name, data, constraint="false")
-                graph.edge(self.name, data, constraint="true")
-
+            for name in values:
+                print ("+++ name:", name)
+                other = root.get_block_by_name(name)
+                graph.edge(self, other, constraint="true")
 # ...
 
 # ...

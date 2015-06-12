@@ -30,6 +30,7 @@ class Parser(object):
         self._dict_constructor = dict_constructor
         self._verbose          = verbose
         self._graph            = Digraph(comment="Fortran Parser Graph")
+        self._list_block       = []
 
         if filename is not None:
             f = open(filename, 'r')
@@ -68,6 +69,34 @@ class Parser(object):
     def graph(self):
         return self._graph
 
+    @property
+    def blocks(self):
+        return self._list_block
+
+    def append(self, block):
+        self._list_block.append(block)
+
+    def get_block_index(self, block):
+        return self.blocks.index(block)
+
+    def get_block_by_id(self, ID):
+        for b in self.blocks:
+            if id(b) == ID:
+                return b
+        return None
+
+    def get_block_by_name(self, name):
+        for b in self.blocks:
+            if b.name == name:
+                return b
+        return None
+
+    def get_block_by_label(self, label):
+        for b in self.blocks:
+            if b.label == label:
+                return b
+        return None
+
     # ...
     def run(self, update_variables=True):
         source = self.text
@@ -75,6 +104,7 @@ class Parser(object):
         if self.verbose > 0:
             print (self.dict_names)
 
+        # ... parse, replace,
         for key, values in self.dict_names.items():
             keyword = key
 
@@ -99,12 +129,17 @@ class Parser(object):
                 if is_modified:
                     block.update_source()
 
-                # ... update Graph
-                block.update_graph(self._graph)
+                # ... append block in the blocks list
+                self.append(block)
                 # ...
 
                 source = block.source
-
         self._text = source
+        # ...
+
+        # ... update Graph
+        for block in self.blocks:
+            block.update_graph(self)
+        # ...
 # ...
 

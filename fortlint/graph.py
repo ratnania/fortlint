@@ -10,13 +10,29 @@ except ImportError:
 
 # ...
 class Node:
-    def __init__(self, key, label="", color="black"):
+    def __init__(self, key, label=None, color=None):
         self._ID  = id(key)
         print "*** node created with id:", self.ID
         self._key = key
         self._connectedTo = {}
         self._color = color
         self._label = label
+
+        try:
+            self._label = self.key.label
+        except:
+            if label is None:
+                self._label = self.ID
+            else:
+                self._label = label
+
+        try:
+            self._color = self.key.color
+        except:
+            if color is None:
+                self._color = "black"
+            else:
+                self._color = color
 
     @property
     def ID(self):
@@ -95,10 +111,18 @@ class Graph:
 
     def edge(self, vertex_f, vertex_t, weight=0, constraint="false"):
         if vertex_f not in self.nodes:
-            self.node(vertex_f, label=vertex_f)
+            print ("create new vertex_f :", vertex_f)
+            try:
+                self.node(vertex_f, label=vertex_f.label)
+            except:
+                self.node(vertex_f, label=vertex_f)
 
         if vertex_t not in self.nodes:
-            self.node(vertex_t, label=vertex_t)
+            print ("create new vertex_t :", vertex_t)
+            try:
+                self.node(vertex_t, label=vertex_t.label)
+            except:
+                self.node(vertex_t, label=vertex_t)
 
         self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
                                           weight=weight, \
@@ -122,7 +146,11 @@ class Digraph(Graph):
             dot = Digraph_graphviz(comment=self.comment)
             for node in self:
                 print (node.ID, node.label, node.color)
-                dot.node(str(node.ID), label=node.label, color=node.color)
+                dot.node(str(node.ID), \
+                         label=str(node.label), \
+                         color=str(node.color))
+
+            for node in self:
                 for son in node.getConnections():
                     dot.edge(str(node.ID), str(son.ID), constraint="true")
         else:
