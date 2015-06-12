@@ -1,0 +1,2 @@
+- parse declaration only before contains
+- parse calls only after contains
