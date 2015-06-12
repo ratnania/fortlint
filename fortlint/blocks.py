@@ -33,8 +33,11 @@ class Block(object):
         self._description = None
         self._verbose     = verbose
         self._dict_sons   = {}
+        self._dict_names  = {}
         self._ancestor    = ancestor
         self._color       = color
+        self._contains    = None
+
         if color is None:
             self.set_color()
 
@@ -92,6 +95,10 @@ class Block(object):
         return self._dict_sons
 
     @property
+    def dict_names(self):
+        return self._dict_names
+
+    @property
     def ancestor(self):
         return self._ancestor
 
@@ -100,6 +107,13 @@ class Block(object):
         if self._color is None:
             self.set_color()
         return self._color
+
+    @property
+    def contains(self):
+        if self._contains is None:
+            _re = extract_contains()
+            self._contains = (len(_re.findall(self.text)) > 0)
+        return self._contains
 
     def set_source(self, source):
         self._source = source
@@ -184,6 +198,33 @@ class Block(object):
         if self.keyword == "function":
             self._color = "green"
 
+    def update_label(self, root):
+        if not self.contains:
+            print ("NOOOOOOOOOOON")
+            return
+        else:
+            print ("coucou")
+            _re = extract_contains()
+
+            list_code = _re.split(self.text)
+#            print len(list_code)
+#            print list_code
+            source = ''.join(list_code[1:])
+            self._dict_names['subroutine'] = get_names_subroutine(source)
+            self._dict_names['function']   = get_names_function(source)
+
+            # ...
+            for key, values in self.dict_names.items():
+                keyword = key
+
+                for name in values:
+                    print ("+++ name:", name)
+                    other = root.get_block_by_name(name)
+                    other._label = self.label + " % "+ other.label
+                    print ("--- new label :", other.label)
+            # ...
+
+
     def update_graph(self, root):
         # ... add current block if it is a subroutine or a function
         graph = root.graph
@@ -195,7 +236,7 @@ class Block(object):
             keyword = key
 
             for name in values:
-                print ("+++ name:", name)
+#                print ("+++ name:", name)
                 other = root.get_block_by_name(name)
                 graph.edge(self, other, constraint="true")
 # ...

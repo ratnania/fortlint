@@ -12,7 +12,7 @@ except ImportError:
 class Node:
     def __init__(self, key, label=None, color=None):
         self._ID  = id(key)
-        print "*** node created with id:", self.ID
+#        print "*** node created with id:", self.ID
         self._key = key
         self._connectedTo = {}
         self._color = color
@@ -111,14 +111,14 @@ class Graph:
 
     def edge(self, vertex_f, vertex_t, weight=0, constraint="false"):
         if vertex_f not in self.nodes:
-            print ("create new vertex_f :", vertex_f)
+#            print ("create new vertex_f :", vertex_f)
             try:
                 self.node(vertex_f, label=vertex_f.label)
             except:
                 self.node(vertex_f, label=vertex_f)
 
         if vertex_t not in self.nodes:
-            print ("create new vertex_t :", vertex_t)
+#            print ("create new vertex_t :", vertex_t)
             try:
                 self.node(vertex_t, label=vertex_t.label)
             except:

@@ -137,6 +137,11 @@ class Parser(object):
         self._text = source
         # ...
 
+        # ... update labels
+        for block in self.blocks:
+            block.update_label(self)
+        # ...
+
         # ... update Graph
         for block in self.blocks:
             block.update_graph(self)

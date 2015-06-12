@@ -110,6 +110,22 @@ def test_extract_subroutine_call(source):
         print ("")
 # ...
 
+# ...
+def test_extract_module_contains(source):
+    keyword = "module"
+    _re = extract_blocks(keyword, "my_module4")
+    r = _re.findall(source.lower())[0]
+
+    _re = extract_contains()
+    r = _re.findall(r)[0]
+
+    if PRINT :
+        print (">>> extract " + keyword)
+        print (r)
+        print ("")
+# ...
+
+
 
 
 
@@ -119,4 +135,5 @@ if __name__ == "__main__":
 #    test_extract_function(source_function)
 #    test_extract_module(source_module_1)
 #    test_extract_module(source_module_2)
-    test_extract_subroutine_call(source_subroutine)
+#    test_extract_subroutine_call(source_subroutine)
+    test_extract_module_contains(source_module_2)

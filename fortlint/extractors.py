@@ -85,6 +85,15 @@ def extract_function_call():
     return word_re
 # ...
 
+# ...
+def extract_contains():
+    pattern = r"\bcontains\b"
+
+    word_re = re.compile(pattern)
+    return word_re
+# ...
+
+
 
 
 
