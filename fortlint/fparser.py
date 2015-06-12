@@ -29,7 +29,8 @@ class Parser(object):
         self._dict_names       = {}
         self._dict_constructor = dict_constructor
         self._verbose          = verbose
-        self._graph            = Digraph(name="root")
+        self._graph_decl       = Digraph(name="declarations")
+        self._graph_call       = Digraph(name="calls")
         self._list_block       = []
 
         if filename is not None:
@@ -67,8 +68,12 @@ class Parser(object):
         return self._verbose
 
     @property
-    def graph(self):
-        return self._graph
+    def graph_decl(self):
+        return self._graph_decl
+
+    @property
+    def graph_call(self):
+        return self._graph_call
 
     @property
     def blocks(self):
@@ -147,7 +152,8 @@ class Parser(object):
 
         # ... update Graph
         for block in self.blocks:
-            block.update_graph(self)
+            block.update_graph_decl(self)
+            block.update_graph_call(self)
         # ...
 # ...
 

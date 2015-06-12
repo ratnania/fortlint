@@ -33,8 +33,8 @@ class Block(object):
         self._label       = None
         self._description = None
         self._verbose     = verbose
-        self._dict_sons   = {}
-        self._dict_names  = {}
+        self._dict_call   = {}
+        self._dict_decl  = {}
         self._ancestor    = ancestor
         self._color       = color
         self._contains    = None
@@ -93,12 +93,12 @@ class Block(object):
         return self._verbose
 
     @property
-    def dict_sons(self):
-        return self._dict_sons
+    def dict_call(self):
+        return self._dict_call
 
     @property
-    def dict_names(self):
-        return self._dict_names
+    def dict_decl(self):
+        return self._dict_decl
 
     @property
     def ancestor(self):
@@ -181,10 +181,10 @@ class Block(object):
             source = ''.join(list_code[0])
 
         _re = extract_subroutine_call()
-        self._dict_sons["subroutine"] = _re.findall(source)
+        self._dict_call["subroutine"] = _re.findall(source)
 
         _re = extract_function_call()
-        self._dict_sons["function"] = _re.findall(source)
+        self._dict_call["function"] = _re.findall(source)
 
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
@@ -228,14 +228,14 @@ class Block(object):
 #            print "XXXXXXXXXXXXXXXXXXXXXXXXXX ", self.keyword, self.name
             source = ''.join(list_code[1:])
 #            print source
-            self._dict_names['subroutine'] = get_names_subroutine(source.lower())
-            self._dict_names['function']   = get_names_function(source.lower())
-            self._dict_names['module']     = get_names_module(source.lower())
+            self._dict_decl['subroutine'] = get_names_subroutine(source.lower())
+            self._dict_decl['function']   = get_names_function(source.lower())
+            self._dict_decl['module']     = get_names_module(source.lower())
 
-#            print self.dict_names
+#            print self.dict_decl
 
             # ...
-            for key, values in self.dict_names.items():
+            for key, values in self.dict_decl.items():
                 keyword = key
 #                print "****** ",  key, values
 
@@ -249,13 +249,13 @@ class Block(object):
             # ...
 
 
-    def update_graph(self, root):
+    def update_graph_decl(self, root):
+        if not self.contains:
+            return
+
         # ... add current block if it is a subroutine or a function
-        graph = root.graph
-        decl_graph = graph
-        if self.contains:
-            subgraph   = Digraph(name=self.name)
-            decl_graph = subgraph
+        graph = root.graph_decl
+        subgraph   = Digraph(name=self.name)
 
 #        print self.color
         attributs = {}
@@ -266,7 +266,7 @@ class Block(object):
 #        graph.node(self, attributs=attributs)
 
         # ... add edges / nodes for functions/subroutines declarations
-        for key, values in self.dict_names.items():
+        for key, values in self.dict_decl.items():
             keyword = key
 
             for name in values:
@@ -277,11 +277,25 @@ class Block(object):
 #                attributs["constraint"] = "true"
                 attributs["style"]      = "dashed"
 
-                decl_graph.edge(self, other, attributs=attributs)
+                subgraph.edge(self, other, attributs=attributs)
         # ...
 
+        # ... update root graph with subgraph
+        graph.add_subgraph(subgraph)
+        # ...
+
+    def update_graph_call(self, root):
+        # ... add current block if it is a subroutine or a function
+        graph = root.graph_call
+
+#        print self.color
+        attributs = {}
+#        attributs["constraint"] = "true"
+        attributs["style"]      = "solid"
+        attributs["label"]      = self.label
+
         # ... add edges / nodes for functions/subroutines calls
-        for key, values in self.dict_sons.items():
+        for key, values in self.dict_call.items():
             keyword = key
 
             for name in values:
@@ -293,11 +307,6 @@ class Block(object):
                 attributs["style"]      = "solid"
 
                 graph.edge(self, other, attributs=attributs)
-        # ...
-
-        # ... update root graph with subgraph
-        if self.contains:
-            graph.add_subgraph(subgraph)
         # ...
 # ...
 
