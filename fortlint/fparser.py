@@ -37,7 +37,7 @@ class Parser(object):
         self._verbose          = verbose
         self._graph_decl       = Digraph(name="declarations")
         self._graph_call       = Digraph(name="calls")
-        self._list_block       = []
+        self._dict_block       = {}
         self._prefix           = None
         # ... contains the source code for each filename
         self._dict_text        = {}
@@ -104,35 +104,35 @@ class Parser(object):
         return self._graph_call
 
     @property
-    def blocks(self):
-        return self._list_block
+    def dict_block(self):
+        return self._dict_block
 
     @property
     def dict_text(self):
         return self._dict_text
 
-    def append(self, block):
-        self._list_block.append(block)
-
-    def get_block_index(self, block):
-        return self.blocks.index(block)
+    def append(self, filename, block):
+        self._dict_block[filename].append(block)
 
     def get_block_by_id(self, ID):
-        for b in self.blocks:
-            if id(b) == ID:
-                return b
+        for filename, blocks in self.dict_block.items():
+            for b in blocks:
+                if id(b) == ID:
+                    return b
         return None
 
     def get_block_by_name(self, name):
-        for b in self.blocks:
-            if b.name.lower() == name.lower():
-                return b
+        for filename, blocks in self.dict_block.items():
+            for b in blocks:
+                if b.name.lower() == name.lower():
+                    return b
         return None
 
     def get_block_by_label(self, label):
-        for b in self.blocks:
-            if b.label.lower() == label.lower():
-                return b
+        for filename, blocks in self.dict_block.items():
+            for b in blocks:
+                if b.label.lower() == label.lower():
+                    return b
         return None
 
     # ...
@@ -154,7 +154,10 @@ class Parser(object):
             except:
                 pass
 
+            self._dict_block[filename] = []
             self.run_single(filename)
+
+        self.update()
     # ...
 
     # ...
@@ -196,36 +199,43 @@ class Parser(object):
                         block.parse_variables()
 
                         # ... append block in the blocks list
-                        self.append(block)
+                        self.append(filename, block)
                         # ...
 
                 source = block.source
         self._dict_text[filename] = source
         # ...
 
+    def update(self):
         # ... update labels
-        for block in self.blocks:
-            block.update_label(self)
+        for filename, blocks in self.dict_block.items():
+            for block in blocks:
+                block.update_label(self)
         # ...
 
         # ... update variables
         update_variables = self.dict_attribut["update_variables"]
-        source = self.dict_text[filename]
-        for block in self.blocks:
-            block.set_source(source)
-            block.get_code()
-#            print "////// ", [(v.prefix, v.name) for v in block.variables]
-            if update_variables:
-                block.update_variables()
-            block.update_source()
-            source = block.source
-        self._dict_text[filename] = source
+        for filename, blocks in self.dict_block.items():
+            source = self.dict_text[filename]
+            blocks1 = [b for b in blocks if b.keyword=="module"]
+            blocks2 = [b for b in blocks if not b.keyword=="module"]
+            for _blocks in [blocks1, blocks2]:
+                for block in _blocks:
+                    block.set_source(source)
+                    block.get_code()
+    #                print "////// ", [(v.prefix, v.name) for v in block.variables]
+                    if update_variables:
+                        block.update_variables()
+                    block.update_source()
+                    source = block.source
+            self._dict_text[filename] = source
         # ...
 
         # ... update Graph
-        for block in self.blocks:
-            block.update_graph_decl(self)
-            block.update_graph_call(self)
+        for filename, blocks in self.dict_block.items():
+            for block in blocks:
+                block.update_graph_decl(self)
+                block.update_graph_call(self)
         # ...
 
     def save_files(self, in_place=False, suffix=".FORTLINT"):

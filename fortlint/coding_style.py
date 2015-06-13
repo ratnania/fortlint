@@ -101,7 +101,7 @@ class BlockJorek(Block):
         list_code = self._re_block.split(self.source)
         list_code_new = []
         list_code_new.append(list_code[0])
-        code_inner   = self.keyword.upper() + " " + self.prefix + self.name.upper() \
+        code_inner   = self.keyword.upper() + " " + self.prefix.upper() + self.name.upper() \
                      + self.text \
                      + " END " + self.keyword.upper() + " " + self.name.upper()
         list_code_new.append(code_inner)
@@ -110,10 +110,11 @@ class BlockJorek(Block):
 
         self._source = ''.join(list_code_new)
 #        print self.keyword
-        if self.keyword == "function":
+        if self.keyword == "subroutine":
             print "XXXXXXXXXXXXXXXXXXXXXXXX"
         if self.verbose > 1:
             print self._source
+        print self._source
 # ...
 
 # ...
