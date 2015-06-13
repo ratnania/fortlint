@@ -36,15 +36,8 @@ def make_test(filename=None, dirname=None):
     if GRAPH:
         parser.graph_decl.render("graph-declarations.gv", view=False)
         parser.graph_call.render("graph-calls.gv", view=False)
-#
-#    filename_backup = filename+".BACKUP"
-#    filename_out    = filename+".OUTPUT"
-#
-#    command = "cp " + filename + " " + filename_backup
-#    os.system(command)
-#
-#    f = open(filename_out, 'w')
-#    f.write(parser.text)
+
+    parser.save_files(in_place=False)
 # ...
 
 def test_1():

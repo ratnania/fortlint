@@ -226,5 +226,19 @@ class Parser(object):
             block.update_graph_decl(self)
             block.update_graph_call(self)
         # ...
+
+    def save_files(self, in_place=True, suffix=".FORTLINT"):
+        for filename, text in self.dict_text.items():
+            if in_place:
+                filename_out    = filename + suffix
+            else:
+                dirname = os.path.dirname(os.path.realpath(filename))
+                dirname_out = dirname + "/_tmp"
+                os.system("mkdir -p " + dirname_out)
+                filename_out = dirname_out + "/" + filename.split("/")[-1] + suffix
+
+            f = open(filename_out, 'w')
+            f.write(text)
+
 # ...
 
