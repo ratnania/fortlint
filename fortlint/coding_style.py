@@ -110,11 +110,11 @@ class BlockJorek(Block):
 
         self._source = ''.join(list_code_new)
 #        print self.keyword
-        if self.keyword == "subroutine":
-            print "XXXXXXXXXXXXXXXXXXXXXXXX"
+#        if self.keyword == "subroutine":
+#            print "XXXXXXXXXXXXXXXXXXXXXXXX"
         if self.verbose > 1:
             print self._source
-        print self._source
+#        print self._source
 # ...
 
 # ...

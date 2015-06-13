@@ -52,7 +52,7 @@ def get_names_subroutine(text_in):
         for s in list_s:
             list_d = [d.rstrip().lstrip() for d in s.split("(") if len(d) > 0]
             list_names.append(list_d[0])
-    print ("+++++ subroutine-names :", list_names)
+#    print ("+++++ subroutine-names :", list_names)
     list_names = [name.lower() for name in list_names if len(name) > 0]
     return list_names
 # ...
@@ -74,7 +74,7 @@ def get_names_function(text_in):
         for s in list_s:
             list_d = [d.rstrip().lstrip() for d in s.split("(") if len(d) > 0]
             list_names.append(list_d[0])
-    print ("+++++ function-names :", list_names)
+#    print ("+++++ function-names :", list_names)
     list_names = [name.lower() for name in list_names if len(name) > 0]
     return list_names
 # ...

@@ -68,13 +68,6 @@ class Parser(object):
                             self._dict_text[_filename] = progtext
                             f.close()
 
-
-        # ... init dict names
-        self._dict_names['module']     = []
-        self._dict_names['subroutine'] = []
-        self._dict_names['function']   = []
-        # ...
-
     @property
     def dirname(self):
         return self._dirname
@@ -121,6 +114,13 @@ class Parser(object):
                     return b
         return None
 
+    def get_block_by_filename_name(self, filename, name):
+        blocks = self.dict_block[filename]
+        for b in blocks:
+            if b.name.lower() == name.lower():
+                return b
+        return None
+
     def get_block_by_name(self, name):
         for filename, blocks in self.dict_block.items():
             for b in blocks:
@@ -138,19 +138,26 @@ class Parser(object):
     # ...
     def run(self):
         for filename, text in self.dict_text.items():
+            # ... init dict names
+            self._dict_names[filename,'module']     = []
+            self._dict_names[filename,'subroutine'] = []
+            self._dict_names[filename,'function']   = []
+            # ...
+
+        for filename, text in self.dict_text.items():
             try:
                 for name in get_names_module(text):
-                    self._dict_names['module'].append(name)
+                    self._dict_names[filename, 'module'].append(name)
             except:
                 pass
             try:
                 for name in get_names_subroutine(text):
-                    self._dict_names['subroutine'].append(name)
+                    self._dict_names[filename, 'subroutine'].append(name)
             except:
                 pass
             try:
                 for name in get_names_function(text):
-                    self._dict_names['function'].append(name)
+                    self._dict_names[filename, 'function'].append(name)
             except:
                 pass
 
@@ -172,37 +179,38 @@ class Parser(object):
             print (self.dict_names)
 
         # ... parse, replace,
-        for key, values in self.dict_names.items():
-            keyword = key
+        for keys, values in self.dict_names.items():
+            _filename = keys[0]
+            keyword  = keys[1]
+            if _filename == filename:
+                for block_name in values:
+                    if self.verbose > 0:
+                        print (">>>>> block_name:" + block_name)
 
-            for block_name in values:
-                if self.verbose > 0:
-                    print (">>>>> block_name:" + block_name)
+                    if len(block_name) > 0:
+                        prefix_lib = None
+                        constructor = self.dict_constructor[keyword]
+                        block = constructor(TAG=block_name, \
+                                            source=source, \
+                                            filename=filename, \
+                                            prefix=self.dict_attribut["prefix"], \
+                                            prefix_lib=prefix_lib, \
+                                            verbose=self.verbose)
+                        block.get_code()
+    #                    print "------------------------"
+    #                    print block.source
+    #                    print "------------------------"
+                        if block.is_valid:
+                            block.get_signature()
+                            block.get_arguments()
+                            block.get_decl_call()
+                            block.parse_variables()
 
-                if len(block_name) > 0:
-                    prefix_lib = None
-                    constructor = self.dict_constructor[keyword]
-                    block = constructor(TAG=block_name, \
-                                        source=source, \
-                                        filename=filename, \
-                                        prefix=self.dict_attribut["prefix"], \
-                                        prefix_lib=prefix_lib, \
-                                        verbose=self.verbose)
-                    block.get_code()
-#                    print "------------------------"
-#                    print block.source
-#                    print "------------------------"
-                    if block.is_valid:
-                        block.get_signature()
-                        block.get_arguments()
-                        block.get_decl_call()
-                        block.parse_variables()
+                            # ... append block in the blocks list
+                            self.append(filename, block)
+                            # ...
 
-                        # ... append block in the blocks list
-                        self.append(filename, block)
-                        # ...
-
-                source = block.source
+                    source = block.source
         self._dict_text[filename] = source
         # ...
 

@@ -45,6 +45,7 @@ class Block(object):
         self._prefix_lib  = prefix_lib
         self._contains    = None
         self._is_valid    = False
+        self._filename    = filename
 
         if color is None:
             self.set_color()
@@ -62,6 +63,10 @@ class Block(object):
     @property
     def keyword(self):
         return self._keyword
+
+    @property
+    def filename(self):
+        return self._filename
 
     @property
     def label(self):
@@ -282,7 +287,8 @@ class Block(object):
 
             for name in values:
 #                print ("/// name:", name)
-                other = root.get_block_by_name(name)
+#                other = root.get_block_by_name(name)
+                other = root.get_block_by_filename_name(self.filename, name)
 
                 attributs = {}
 #                attributs["constraint"] = "true"
@@ -338,7 +344,8 @@ class Block(object):
 
             for name in values:
 #                print ("/// name:", name)
-                other = root.get_block_by_name(name)
+#                other = root.get_block_by_name(name)
+                other = root.get_block_by_filename_name(self.filename, name)
                 if other is not None:
                     attributs = {}
 #                    attributs["constraint"] = "true"

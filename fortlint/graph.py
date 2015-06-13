@@ -177,7 +177,7 @@ class Graph:
                 try:
                     v_attributs["label"] = vertex.label
                 except:
-                    v_attributs["label"] = vertex
+                    v_attributs["label"] = "" # vertex
 
                 self.node(vertex, attributs=v_attributs)
 
