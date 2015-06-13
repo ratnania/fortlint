@@ -179,7 +179,13 @@ class Block(object):
     def get_signature(self):
         if self.text is None:
             self.get_code()
-        return self._re_signature.findall(self.text, re.I)[0]
+
+        try:
+            t = self._re_signature.findall(self.text, re.I)[0]
+        except:
+            t = None
+
+        return t
 
     def get_arguments(self):
         if self.text is None:
@@ -187,8 +193,11 @@ class Block(object):
         _text = self.get_signature()
         if self.verbose > 0:
             print (">>> signature:", _text)
-        data = self._re_arguments.findall(_text, re.I)
-        self._arguments = [b.rstrip() for b in data if len(b) > 0]
+        try:
+            data = self._re_arguments.findall(_text, re.I)
+            self._arguments = [b.rstrip() for b in data if len(b) > 0]
+        except:
+            self._arguments = []
         return self._arguments
 
     def get_decl_call(self):
