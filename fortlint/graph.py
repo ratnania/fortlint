@@ -202,7 +202,7 @@ class Digraph(Graph):
     def to_graphviz(self):
         dot = None
         if GRAPH:
-            print ">>>> name :", self.name
+#            print ">>>> name :", self.name
             dot = Digraph_graphviz(self.name, comment=self.comment, filename='cluster.gv')
 
             # ... insert subgraphs
@@ -211,9 +211,9 @@ class Digraph(Graph):
             for sub in self.subgraphs:
                 label = '"process ' + str(i) + '"'
 
-                print "+++++"
+#                print "+++++"
                 _sub = sub.to_graphviz()
-                print "-----"
+#                print "-----"
 
                 _sub.body.append('style=filled')
                 _sub.body.append('color='+list_colors[i])
@@ -243,7 +243,7 @@ class Digraph(Graph):
 #                    dot.edge(str(node.ID)[::-1][:2], str(son.ID)[::-1][:2])
             # ...
 
-            print dot
+#            print dot
 
 #            dot.node('start', shape='Mdiamond')
 #            dot.node('end', shape='Msquare')

@@ -124,9 +124,9 @@ class Parser(object):
                     constructor = self.dict_constructor[keyword]
                     block = constructor(TAG=block_name, source=source)
                     block.get_code()
-                    print "------------------------"
-                    print block.source
-                    print "------------------------"
+#                    print "------------------------"
+#                    print block.source
+#                    print "------------------------"
                     if block.is_valid:
                         block.get_signature()
                         block.get_arguments()

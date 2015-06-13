@@ -173,6 +173,10 @@ class Block(object):
         """
         """
         self._dict_decl, self._dict_call = get_declarations_calls(self.text)
+        if self.keyword == "module":
+            print ">>>>>>>>>>> MODULE :", self.name
+            print self.dict_decl
+            print self.dict_call
 
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
@@ -208,28 +212,14 @@ class Block(object):
         if not self.contains:
             return
         else:
-            _re = extract_contains()
-
-            list_code = _re.split(self.text)
-#            print len(list_code)
-#            print list_code
-#            print "XXXXXXXXXXXXXXXXXXXXXXXXXX ", self.keyword, self.name
-            source = ''.join(list_code[1:])
-#            print source
-#            self._dict_decl['subroutine'] = get_names_subroutine(source.lower())
-#            self._dict_decl['function']   = get_names_function(source.lower())
-#            self._dict_decl['module']     = get_names_module(source.lower())
-
-#            print self.dict_decl
-
-            # ...
             for key, values in self.dict_decl.items():
                 keyword = key
-#                print "****** ",  key, values
+#                if self.keyword == "module":
+#                    print "****** ",  key, values
 
                 for name in values:
 #                    if self.keyword == "module":
-                    print ("+++ name:", name)
+#                    print ("+++ name:", name)
                     other = root.get_block_by_name(name)
 
                     try:
@@ -245,8 +235,6 @@ class Block(object):
                     other._label = label_s + " % "+ label_o
 #                    if self.keyword == "module":
 #                    print ("--- new label :", other.label)
-            # ...
-
 
     def update_graph_decl(self, root):
         if not self.contains:
@@ -294,14 +282,16 @@ class Block(object):
         attributs["label"]      = self.label
 
         # ... add edges / nodes for functions/subroutines calls
-        print "++++++++++++++++++++++++++++++++"
-        print self.dict_call
+        if self.keyword == "module":
+            print "++++++++++++++++++++++++++++++++"
+            print self.name, " ----- " ,self.dict_call
         for key, values in self.dict_call.items():
             keyword = key
-            print ("key :", key, "values :", values)
+            if self.keyword == "module":
+                print ("key :", key, "values :", values)
 
             for name in values:
-                print ("/// name:", name)
+#                print ("/// name:", name)
                 other = root.get_block_by_name(name)
                 if other is not None:
                     attributs = {}

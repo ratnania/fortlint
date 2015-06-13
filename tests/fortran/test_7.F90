@@ -84,6 +84,9 @@
           ! multi Subroutine and Function declarations inside a MODULE 
 
           implicit none
+          CALL sub_b1(w,a)
+          CALL sub_b2(w,w,a)
+          f = func_a2(a)
 
         contains
                 ! ..............................
@@ -109,6 +112,7 @@
                 IMPLICIT NONE
                    INTEGER :: i
 
+                   func_b1(a)
 
                    RETURN
                 END SUBROUTINE sub_b2
@@ -123,7 +127,6 @@
                    ! LOCAL
 
                    call sub_b1(w,w,a)
-                   func_b1(a)
                    RETURN
                 END FUNCTION func_b1 
                 ! ..............................

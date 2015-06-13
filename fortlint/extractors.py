@@ -144,7 +144,7 @@ def get_declarations_calls(source):
     if condition:
         list_code = _re.split(text)
         for code in list_code:
-            print ">>> ", code
+#            print ">>> ", code
 
 
         # ... get calls - subroutines
