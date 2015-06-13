@@ -116,19 +116,31 @@ class BlockJorek(Block):
 
 # ...
 class SubroutineBlockJorek(BlockJorek, SubroutineBlock):
-    def __init__(self, TAG="", source=None):
-        BlockJorek.__init__(self, "subroutine", TAG=TAG, source=source)
+    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+        BlockJorek.__init__(self, "subroutine", \
+                            TAG=TAG, \
+                            source=source, \
+                            verbose=verbose, \
+                            filename=filename)
 # ...
 
 # ...
 class FunctionBlockJorek(BlockJorek, FunctionBlock):
-    def __init__(self, TAG="", source=None):
-        BlockJorek.__init__(self, "function", TAG=TAG, source=source)
+    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+        BlockJorek.__init__(self, "function", \
+                            TAG=TAG, \
+                            source=source, \
+                            verbose=verbose, \
+                            filename=filename)
 # ...
 
 # ...
 class ModuleBlockJorek(BlockJorek, ModuleBlock):
-    def __init__(self, TAG="", source=None):
-        BlockJorek.__init__(self, "module", TAG=TAG, source=source)
+    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+        BlockJorek.__init__(self, "module", \
+                            TAG=TAG, \
+                            source=source, \
+                            verbose=verbose, \
+                            filename=filename)
 # ...
 

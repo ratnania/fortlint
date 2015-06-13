@@ -216,7 +216,7 @@ class Digraph(Graph):
 #                print "-----"
 
                 _sub.body.append('style=filled')
-                _sub.body.append('color='+list_colors[i])
+                _sub.body.append('color='+list_colors[i% len(list_colors)])
                 _sub.body.append('label = ' + label)
 
 #                _sub.node_attr.update(style='filled', color=list_colors[i])

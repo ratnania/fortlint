@@ -22,7 +22,7 @@ class Block(object):
     def __init__(self, keyword, \
                  TAG="", source=None, \
                  verbose=0, \
-                 ancestor=None, color=None):
+                 ancestor=None, color=None, filename=None):
 
         self._keyword     = keyword
         self._TAG         = TAG
@@ -267,7 +267,8 @@ class Block(object):
 #                attributs["constraint"] = "true"
                 attributs["style"]      = "dashed"
 
-                subgraph.edge(self, other, attributs=attributs)
+                if other is not None:
+                    subgraph.edge(self, other, attributs=attributs)
         # ...
 
         # ... update root graph with subgraph

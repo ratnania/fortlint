@@ -88,6 +88,7 @@ def get_names_module(text_in):
             list_names.append(list_d[0])
     set_names = set(list_names)
     list_names = list(set_names)
+    list_names = [name for name in list_names if len(name) > 0]
 #    print ("+++++ modules-names :", list_names)
     return list_names
 # ...

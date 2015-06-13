@@ -9,25 +9,28 @@ from constants import PREFIX_CONTEXT_TYPE_ARGUMENT
 from constants import PREFIX_CONTEXT_TYPE_MODULE
 from constants import PREFIX_CONTEXT_TYPE_OBJECT
 from constants import PREFIX_CONTEXT_TYPE_GLOBAL
+from constants import FORTRAN_EXTENSIONS
 from extractors import *
 from graph import Digraph
 import re
 import os
+import sys
+from glob import glob
 
 # ...
 class Parser(object):
     """
     Python Class for Fortran language parser
     """
-    def __init__(self, filename=None, \
+    def __init__(self, \
+                 filename=None, \
                  dirname=None, \
+                 text=None, \
                  dict_constructor=None, \
                  dict_attribut=None, \
                  verbose=0):
 
-        self._filename         = filename
         self._dirname          = dirname
-        self._text             = None
         self._dict_names       = {}
         self._dict_constructor = dict_constructor
         self._dict_attribut    = dict_attribut
@@ -35,28 +38,46 @@ class Parser(object):
         self._graph_decl       = Digraph(name="declarations")
         self._graph_call       = Digraph(name="calls")
         self._list_block       = []
+        self._prefix           = None
+        # ... contains the source code for each filename
+        self._dict_text        = {}
+
+        if (filename is not None) and (dirname is not None):
+            print ("Parser cannot be called with both filename and dirname not empty")
+            raise()
 
         if filename is not None:
             f = open(filename, 'r')
             progtext = f.read()
-            self._text = progtext.lower()
+            self._dict_text[filename] = progtext.lower()
             f.close()
 
-            self._dict_names['module']     = get_names_module(self.text)
-            self._dict_names['subroutine'] = get_names_subroutine(self.text)
-            self._dict_names['function']   = get_names_function(self.text)
+        if dirname is not None:
+            for root, subdirs, files in os.walk(dirname):
+                print "++ searching in ", root
+                if files is not None:
+                    for File in files:
+                        ext = File.split(".")[-1]
+                        if ext in FORTRAN_EXTENSIONS:
+                            _filename =  os.path.join(root, File)
 
-    @property
-    def filename(self):
-        return self._filename
+                            print "---- filename :", _filename
+
+                            f = open(_filename, "r")
+                            progtext = f.read()
+                            self._dict_text[_filename] = progtext.lower()
+                            f.close()
+
+
+        # ... init dict names
+        self._dict_names['module']     = []
+        self._dict_names['subroutine'] = []
+        self._dict_names['function']   = []
+        # ...
 
     @property
     def dirname(self):
         return self._dirname
-
-    @property
-    def text(self):
-        return self._text
 
     @property
     def dict_names(self):
@@ -86,6 +107,10 @@ class Parser(object):
     def blocks(self):
         return self._list_block
 
+    @property
+    def dict_text(self):
+        return self._dict_text
+
     def append(self, block):
         self._list_block.append(block)
 
@@ -112,17 +137,34 @@ class Parser(object):
 
     # ...
     def run(self):
-        self.run_single()
+        i = 0
+        for filename, text in self.dict_text.items():
+            try:
+                for name in get_names_module(text):
+                    self._dict_names['module'].append(name)
+            except:
+                pass
+            try:
+                for name in get_names_subroutine(text):
+                    self._dict_names['subroutine'].append(name)
+            except:
+                pass
+            try:
+                for name in get_names_function(text):
+                    self._dict_names['function'].append(name)
+            except:
+                pass
+
+            self.run_single(filename)
+            i += 1
     # ...
 
     # ...
-    def run_single(self):
+    def run_single(self, filename):
         """
         runs the process for a single file
         """
-        update_variables = self.dict_attribut["update_variables"]
-
-        source = self.text
+        source = self.dict_text[filename]
 
         if self.verbose > 0:
             print (self.dict_names)
@@ -137,7 +179,10 @@ class Parser(object):
 
                 if len(block_name) > 0:
                     constructor = self.dict_constructor[keyword]
-                    block = constructor(TAG=block_name, source=source)
+                    block = constructor(TAG=block_name, \
+                                        source=source, \
+                                        filename=filename, \
+                                        verbose=self.verbose)
                     block.get_code()
 #                    print "------------------------"
 #                    print block.source
@@ -153,7 +198,7 @@ class Parser(object):
                         # ...
 
                 source = block.source
-        self._text = source
+        self._dict_text[filename] = source
         # ...
 
         # ... update labels
@@ -162,8 +207,9 @@ class Parser(object):
         # ...
 
         # ... update variables
+        update_variables = self.dict_attribut["update_variables"]
         if update_variables:
-            source = self.text
+            source = self.dict_text[filename]
             for block in self.blocks:
                 block.set_source(source)
                 block.get_code()
@@ -172,7 +218,7 @@ class Parser(object):
                     block.replace_variable(var)
                 block.update_source()
                 source = block.source
-            self._text = source
+            self._dict_text[filename] = source
         # ...
 
         # ... update Graph
