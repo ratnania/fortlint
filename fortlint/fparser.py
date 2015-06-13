@@ -115,8 +115,6 @@ class Parser(object):
             keyword = key
 
             for block_name in values:
-                is_modified = False
-
                 if self.verbose > 0:
                     print (">>>>> block_name:" + block_name)
 
@@ -132,13 +130,6 @@ class Parser(object):
                         block.get_arguments()
                         block.get_decl_call()
                         block.parse_variables()
-                        if update_variables:
-                            for var in block.variables:
-                                block.replace_variable(var)
-                            is_modified = True
-
-                        if is_modified:
-                            block.update_source()
 
                         # ... append block in the blocks list
                         self.append(block)
@@ -151,6 +142,20 @@ class Parser(object):
         # ... update labels
         for block in self.blocks:
             block.update_label(self)
+        # ...
+
+        # ... update variables
+        if update_variables:
+            source = self.text
+            for block in self.blocks:
+                block.set_source(source)
+                block.get_code()
+#                print [(v.prefix, v.name) for v in block.variables]
+                for var in block.variables:
+                    block.replace_variable(var)
+                block.update_source()
+                source = block.source
+            self._text = source
         # ...
 
         # ... update Graph

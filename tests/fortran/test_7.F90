@@ -74,7 +74,7 @@
                    RETURN
                 END FUNCTION func_a2
                 ! ..............................
-
+R
                 ! ..............................
         end MODULE mod_a
 

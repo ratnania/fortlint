@@ -95,7 +95,6 @@ class BlockJorek(Block):
         pattern = r"\b"+ name + r"\b"
         _text = re.sub(pattern, var.prefix + name.lower(), _text)
 
-
         if inline:
             self._text = _text
         else:

@@ -224,18 +224,18 @@ class Block(object):
 #                    if self.keyword == "module":
 #                    print ("+++ name:", name)
                     other = root.get_block_by_name(name)
+                    if other is not None:
+                        try:
+                            label_s = self.label
+                        except:
+                            label_s = ""
 
-                    try:
-                        label_s = self.label
-                    except:
-                        label_s = ""
+                        try:
+                            label_o = other.label
+                        except:
+                            label_o = ""
 
-                    try:
-                        label_o = other.label
-                    except:
-                        label_o = ""
-
-                    other._label = label_s + " % "+ label_o
+                        other._label = label_s + " % "+ label_o
 #                    if self.keyword == "module":
 #                    print ("--- new label :", other.label)
 

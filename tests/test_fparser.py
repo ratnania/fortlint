@@ -12,7 +12,7 @@ except ImportError:
 # ...
 
 # ...
-def test_1(filename):
+def make_test(filename):
     from fortlint.coding_style import SubroutineBlockJorek
     from fortlint.coding_style import FunctionBlockJorek
     from fortlint.coding_style import ModuleBlockJorek
@@ -27,7 +27,8 @@ def test_1(filename):
     source = parser.text
 
     print (parser.dict_names)
-    parser.run(update_variables=False)
+#    parser.run(update_variables=False)
+    parser.run(update_variables=True)
 
 #    print (parser.text)
 
@@ -37,7 +38,7 @@ def test_1(filename):
 
     filename_backup = filename+".BACKUP"
 #        filename_out    = filename
-    filename_out    = filename+".BACKUP"
+    filename_out    = filename+".OUTPUT"
 
     command = "cp " + filename + " " + filename_backup
     os.system(command)
@@ -46,14 +47,54 @@ def test_1(filename):
     f.write(parser.text)
 # ...
 
+def test_1():
+    filename = "fortran/test_1.F90"
+    make_test(filename)
+
+def test_2():
+    filename = "fortran/test_2.F90"
+    make_test(filename)
+
+def test_3():
+    filename = "fortran/test_3.F90"
+    make_test(filename)
+
+def test_4():
+    filename = "fortran/test_4.F90"
+    make_test(filename)
+
+def test_5():
+    filename = "fortran/test_5.F90"
+    make_test(filename)
+
+def test_6():
+    filename = "fortran/test_6.F90"
+    make_test(filename)
+
+def test_7():
+    filename = "fortran/test_7.F90"
+    make_test(filename)
+
+def test_input():
+    import sys
+    # -----------------------------------------------
+    try:
+        filename = str(sys.argv[1])
+    except:
+        print ("you must provide an input file")
+        raise()
+    # -----------------------------------------------
+
+    make_test(filename)
+
 #############################################################################
 if __name__ == "__main__":
-
-#    test_1("fortran/test_1.F90")
-#    test_1("fortran/test_2.F90")
-#    test_1("fortran/test_3.F90")
-#    test_1("fortran/test_4.F90")
-#    test_1("fortran/test_5.F90")
-#    test_1("fortran/test_6.F90")
-    test_1("fortran/test_7.F90")
+#    test_1()
+#    test_2()
+#    test_3()
+#    test_4()
+#    test_5()
+#    test_6()
+#    test_7()
+    test_input()
 
