@@ -49,7 +49,7 @@ class Parser(object):
         if filename is not None:
             f = open(filename, 'r')
             progtext = f.read()
-            self._dict_text[filename] = progtext.lower()
+            self._dict_text[filename] = progtext
             f.close()
 
         if dirname is not None:
@@ -65,7 +65,7 @@ class Parser(object):
 
                             f = open(_filename, "r")
                             progtext = f.read()
-                            self._dict_text[_filename] = progtext.lower()
+                            self._dict_text[_filename] = progtext
                             f.close()
 
 
@@ -125,19 +125,18 @@ class Parser(object):
 
     def get_block_by_name(self, name):
         for b in self.blocks:
-            if b.name == name:
+            if b.name.lower() == name.lower():
                 return b
         return None
 
     def get_block_by_label(self, label):
         for b in self.blocks:
-            if b.label == label:
+            if b.label.lower() == label.lower():
                 return b
         return None
 
     # ...
     def run(self):
-        i = 0
         for filename, text in self.dict_text.items():
             try:
                 for name in get_names_module(text):
@@ -156,7 +155,6 @@ class Parser(object):
                 pass
 
             self.run_single(filename)
-            i += 1
     # ...
 
     # ...
@@ -167,6 +165,7 @@ class Parser(object):
         source = self.dict_text[filename]
 
         if self.verbose > 0:
+            print ("Run process on :", filename)
             print (self.dict_names)
 
         # ... parse, replace,
@@ -178,10 +177,13 @@ class Parser(object):
                     print (">>>>> block_name:" + block_name)
 
                 if len(block_name) > 0:
+                    prefix_lib = None
                     constructor = self.dict_constructor[keyword]
                     block = constructor(TAG=block_name, \
                                         source=source, \
                                         filename=filename, \
+                                        prefix=self.dict_attribut["prefix"], \
+                                        prefix_lib=prefix_lib, \
                                         verbose=self.verbose)
                     block.get_code()
 #                    print "------------------------"
@@ -208,17 +210,16 @@ class Parser(object):
 
         # ... update variables
         update_variables = self.dict_attribut["update_variables"]
-        if update_variables:
-            source = self.dict_text[filename]
-            for block in self.blocks:
-                block.set_source(source)
-                block.get_code()
-#                print [(v.prefix, v.name) for v in block.variables]
-                for var in block.variables:
-                    block.replace_variable(var)
-                block.update_source()
-                source = block.source
-            self._dict_text[filename] = source
+        source = self.dict_text[filename]
+        for block in self.blocks:
+            block.set_source(source)
+            block.get_code()
+#            print "////// ", [(v.prefix, v.name) for v in block.variables]
+            if update_variables:
+                block.update_variables()
+            block.update_source()
+            source = block.source
+        self._dict_text[filename] = source
         # ...
 
         # ... update Graph
@@ -227,7 +228,7 @@ class Parser(object):
             block.update_graph_call(self)
         # ...
 
-    def save_files(self, in_place=True, suffix=".FORTLINT"):
+    def save_files(self, in_place=False, suffix=".FORTLINT"):
         for filename, text in self.dict_text.items():
             if in_place:
                 filename_out    = filename + suffix

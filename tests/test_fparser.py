@@ -24,6 +24,7 @@ def make_test(filename=None, dirname=None):
 
     dict_attribut    = {}
     dict_attribut["update_variables"] = True
+    dict_attribut["prefix"] = "jorek_"
 
     parser = Parser(filename=filename, \
                     dirname=dirname, \

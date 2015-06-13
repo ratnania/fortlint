@@ -20,7 +20,7 @@ def extract_blocks(word, TAG):
     pattern_end   = "end\s+" + word + r"\s+\b" + TAG + r"\b"
 
     pattern = pattern_start + "(.*?)" + pattern_end
-    word_re = re.compile(pattern, re.DOTALL)
+    word_re = re.compile(pattern, re.DOTALL | re.I)
     return word_re
 # ...
 
@@ -45,13 +45,15 @@ def get_names_subroutine(text_in):
     keyword = "subroutine"
     pattern = r"\b" + keyword + r"\b.*\("
     word_re = re.compile(pattern, re.I)
-    text = word_re.findall(text_in)
+    text = word_re.findall(text_in.lower(), re.I)
     list_names = []
     for t in text:
         list_s = [s for s in t.split(keyword) if len(s) > 0]
         for s in list_s:
             list_d = [d.rstrip().lstrip() for d in s.split("(") if len(d) > 0]
             list_names.append(list_d[0])
+    print ("+++++ subroutine-names :", list_names)
+    list_names = [name.lower() for name in list_names if len(name) > 0]
     return list_names
 # ...
 
@@ -61,13 +63,19 @@ def get_names_function(text_in):
     keyword = "function"
     pattern = r"\b" + keyword + r"\b.*\("
     word_re = re.compile(pattern, re.I)
-    text = word_re.findall(text_in)
+    text = word_re.findall(text_in.lower(), re.I)
+#    print ">>>>>>>>>>>>>>>>>>"
+#    print text_in
+#    print "---"
+#    print len(text)
     list_names = []
     for t in text:
         list_s = [s for s in t.split(keyword) if len(s) > 0]
         for s in list_s:
             list_d = [d.rstrip().lstrip() for d in s.split("(") if len(d) > 0]
             list_names.append(list_d[0])
+    print ("+++++ function-names :", list_names)
+    list_names = [name.lower() for name in list_names if len(name) > 0]
     return list_names
 # ...
 
@@ -77,7 +85,7 @@ def get_names_module(text_in):
     keyword = "module"
     pattern = r"\b" + keyword + r"\b.*"
     word_re = re.compile(pattern, re.I)
-    text = word_re.findall(text_in)
+    text = word_re.findall(text_in.lower(), re.I)
 #    print ("+++++ text :", text)
     list_names = []
     for t in text:
@@ -88,7 +96,7 @@ def get_names_module(text_in):
             list_names.append(list_d[0])
     set_names = set(list_names)
     list_names = list(set_names)
-    list_names = [name for name in list_names if len(name) > 0]
+    list_names = [name.lower() for name in list_names if len(name) > 0]
 #    print ("+++++ modules-names :", list_names)
     return list_names
 # ...
@@ -96,13 +104,13 @@ def get_names_module(text_in):
 # ...
 def get_calls_subroutine(source):
     _re = extract_subroutine_call()
-    return _re.findall(source)
+    return _re.findall(source, re.I)
 # ...
 
 # ...
 def get_calls_function(source):
     _re = extract_function_call()
-    return _re.findall(source)
+    return _re.findall(source, re.I)
 # ...
 
 # ...
@@ -138,7 +146,7 @@ def get_declarations_calls(source):
     text = source
 
     _re = extract_contains()
-    condition = (len(_re.findall(text)) > 0)
+    condition = (len(_re.findall(text, re.I)) > 0)
 
     dict_decl = {}
     dict_calls = {}

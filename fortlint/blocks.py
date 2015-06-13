@@ -22,7 +22,11 @@ class Block(object):
     def __init__(self, keyword, \
                  TAG="", source=None, \
                  verbose=0, \
-                 ancestor=None, color=None, filename=None):
+                 ancestor=None, \
+                 color=None, \
+                 prefix=None, \
+                 prefix_lib=None, \
+                 filename=None):
 
         self._keyword     = keyword
         self._TAG         = TAG
@@ -37,11 +41,19 @@ class Block(object):
         self._dict_decl  = {}
         self._ancestor    = ancestor
         self._color       = color
+        self._prefix      = prefix
+        self._prefix_lib  = prefix_lib
         self._contains    = None
         self._is_valid    = False
 
         if color is None:
             self.set_color()
+
+        if prefix is None:
+            self._prefix = ""
+
+        if prefix_lib is None:
+            self._prefix_lib = ""
 
         self._re_block     = extract_blocks(self._keyword, TAG)
         self._re_signature = extract_signature()
@@ -56,6 +68,14 @@ class Block(object):
         if self._label is None:
             self._label = self.name
         return self._label
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @property
+    def prefix_lib(self):
+        return self._prefix_lib
 
     @property
     def name(self):
@@ -114,7 +134,7 @@ class Block(object):
     def contains(self):
         if self._contains is None:
             _re = extract_contains()
-            self._contains = (len(_re.findall(self.text)) > 0)
+            self._contains = (len(_re.findall(self.text, re.I)) > 0)
         return self._contains
 
     @property
@@ -139,7 +159,7 @@ class Block(object):
 
                 if self.is_valid:
                     try:
-                        self._text = self._re_block.findall(self.source)[0]
+                        self._text = self._re_block.findall(self.source, re.I)[0]
                     except:
                         print ("Cannot parse the source code")
     #                    print (self.source)
@@ -151,13 +171,10 @@ class Block(object):
 
         return self.text
 
-#    def findall(self):
-#        return self._re_block.findall(self.text)
-
     def get_signature(self):
         if self.text is None:
             self.get_code()
-        return self._re_signature.findall(self.text)[0]
+        return self._re_signature.findall(self.text, re.I)[0]
 
     def get_arguments(self):
         if self.text is None:
@@ -165,7 +182,7 @@ class Block(object):
         _text = self.get_signature()
         if self.verbose > 0:
             print (">>> signature:", _text)
-        data = self._re_arguments.findall(_text)
+        data = self._re_arguments.findall(_text, re.I)
         self._arguments = [b.rstrip() for b in data if len(b) > 0]
         return self._arguments
 
@@ -188,7 +205,7 @@ class Block(object):
         self._variables = []
         for keyword in list_keywords_decs:
             _re = dict_keywords_re[keyword]
-            _vars_name = _re.findall(self.text)
+            _vars_name = _re.findall(self.text, re.I)
             for var_name in _vars_name:
                 var = constructor_variable(name=var_name.rstrip(), dtype=keyword)
                 self._variables.append(var)
@@ -202,6 +219,10 @@ class Block(object):
     def update_source(self):
         print ("update_source: not yet implemented for the generic class")
         raise()
+
+    def update_variables(self):
+        for var in self.variables:
+            self.replace_variable(var)
 
     def set_color(self):
         if self.keyword == "module":

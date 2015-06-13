@@ -11,14 +11,14 @@
         contains
 
                 ! ..............................
-                FUNCTION    func_a1(a)
+                function    func_a1(a)
                 IMPLICIT NONE
                    INTEGER :: a
                    ! LOCAL
 
                    call sub_a1(w,a)
                    RETURN
-                END FUNCTION func_a1
+                END function func_a1
                 ! ..............................
 
 
@@ -37,7 +37,7 @@
                 ! ..............................
 
                 ! ..............................
-                FUNCTION    func_a2(a)
+                function    func_a2(a)
                 IMPLICIT NONE
                    INTEGER :: a
                    ! LOCAL
@@ -47,14 +47,14 @@
 
                    CONTAINS
                       ! ..............................
-                      FUNCTION    func_inner(a)
+                      function    func_inner(a)
                       IMPLICIT NONE
                          INTEGER :: a
                          ! LOCAL
 
                          call sub_a2(xx,xx,ii)
                          RETURN
-                      END FUNCTION func_inner
+                      END function func_inner
                       ! ..............................
 
                       ! ..............................
@@ -72,7 +72,7 @@
 
 
                    RETURN
-                END FUNCTION func_a2
+                END function func_a2
                 ! ..............................
 R
                 ! ..............................
@@ -116,7 +116,7 @@ R
                 ! ..............................
 
                 ! ..............................
-                FUNCTION    func_b1(a,b,w)
+                function    func_b1(a,b,w)
                 IMPLICIT NONE
                    INTEGER :: a
                    INTEGER :: b 
@@ -125,7 +125,7 @@ R
 
                    call sub_b1(w,w,a)
                    RETURN
-                END FUNCTION func_b1 
+                END function func_b1 
                 ! ..............................
 
                 ! ..............................

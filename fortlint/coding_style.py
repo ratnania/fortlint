@@ -2,15 +2,7 @@
 
 import re
 import os
-from constants import PREFIX_DECLARATION_TYPE_INTEGER
-from constants import PREFIX_DECLARATION_TYPE_REAL
-from constants import PREFIX_DECLARATION_TYPE_CHARACTER
-from constants import PREFIX_DECLARATION_TYPE_LOGICAL
-from constants import PREFIX_CONTEXT_TYPE_LOCAL
-from constants import PREFIX_CONTEXT_TYPE_ARGUMENT
-from constants import PREFIX_CONTEXT_TYPE_MODULE
-from constants import PREFIX_CONTEXT_TYPE_OBJECT
-from constants import PREFIX_CONTEXT_TYPE_GLOBAL
+from constants import *
 from declaration import Variable
 from blocks import Block
 from blocks import SubroutineBlock
@@ -58,6 +50,11 @@ class VariableJorek(Variable):
             dtype = PREFIX_DECLARATION_TYPE_CHARACTER
         if self.dtype.lower() == "logical":
             dtype = PREFIX_DECLARATION_TYPE_LOGICAL
+        if self.dtype.lower() == "type":
+            dtype = PREFIX_DECLARATION_TYPE_TYPE
+        if self.dtype.lower() == "class":
+            dtype = PREFIX_DECLARATION_TYPE_CLASS
+
         prefix += dtype
 
         self._prefix = prefix + "_"
@@ -104,7 +101,7 @@ class BlockJorek(Block):
         list_code = self._re_block.split(self.source)
         list_code_new = []
         list_code_new.append(list_code[0])
-        code_inner   = self.keyword.upper() + " " + self.name.upper() \
+        code_inner   = self.keyword.upper() + " " + self.prefix + self.name.upper() \
                      + self.text \
                      + " END " + self.keyword.upper() + " " + self.name.upper()
         list_code_new.append(code_inner)
@@ -112,35 +109,61 @@ class BlockJorek(Block):
             list_code_new.append(code)
 
         self._source = ''.join(list_code_new)
+#        print self.keyword
+        if self.keyword == "function":
+            print "XXXXXXXXXXXXXXXXXXXXXXXX"
+        if self.verbose > 1:
+            print self._source
 # ...
 
 # ...
 class SubroutineBlockJorek(BlockJorek, SubroutineBlock):
-    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+    def __init__(self, TAG="", \
+                 source=None, \
+                 filename=None, \
+                 prefix=None, \
+                 prefix_lib=None, \
+                 verbose=0):
         BlockJorek.__init__(self, "subroutine", \
                             TAG=TAG, \
                             source=source, \
                             verbose=verbose, \
+                            prefix=prefix, \
+                            prefix_lib=prefix_lib, \
                             filename=filename)
 # ...
 
 # ...
 class FunctionBlockJorek(BlockJorek, FunctionBlock):
-    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+    def __init__(self, TAG="", \
+                 source=None, \
+                 filename=None, \
+                 prefix=None, \
+                 prefix_lib=None, \
+                 verbose=0):
         BlockJorek.__init__(self, "function", \
                             TAG=TAG, \
                             source=source, \
                             verbose=verbose, \
+                            prefix=prefix, \
+                            prefix_lib=prefix_lib, \
                             filename=filename)
 # ...
 
 # ...
 class ModuleBlockJorek(BlockJorek, ModuleBlock):
-    def __init__(self, TAG="", source=None, filename=None, verbose=0):
+    def __init__(self, TAG="", \
+                 source=None, \
+                 filename=None, \
+                 prefix=None, \
+                 prefix_lib=None, \
+                 verbose=0):
         BlockJorek.__init__(self, "module", \
                             TAG=TAG, \
                             source=source, \
                             verbose=verbose, \
+                            prefix=prefix, \
+                            prefix_lib=prefix_lib, \
                             filename=filename)
 # ...
 
