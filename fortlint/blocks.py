@@ -249,10 +249,12 @@ class Block(object):
                 for name in values:
 #                    if self.keyword == "module":
 #                    print ("+++ name:", name)
-                    other = root.get_block_by_name(name)
+#                    other = root.get_block_by_name(name)
+                    other = root.get_block_by_filename_name(self.filename, name)
                     if other is not None:
                         try:
-                            label_s = self.label
+#                            label_s = self.label
+                            label_s = self.name
                         except:
                             label_s = ""
 
