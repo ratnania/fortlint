@@ -19,15 +19,18 @@ class Parser(object):
     """
     Python Class for Fortran language parser
     """
-    def __init__(self, filename=None, dirname=None, \
-                dict_constructor=None, \
-                verbose=0):
+    def __init__(self, filename=None, \
+                 dirname=None, \
+                 dict_constructor=None, \
+                 dict_attribut=None, \
+                 verbose=0):
 
         self._filename         = filename
         self._dirname          = dirname
         self._text             = None
         self._dict_names       = {}
         self._dict_constructor = dict_constructor
+        self._dict_attribut    = dict_attribut
         self._verbose          = verbose
         self._graph_decl       = Digraph(name="declarations")
         self._graph_call       = Digraph(name="calls")
@@ -62,6 +65,10 @@ class Parser(object):
     @property
     def dict_constructor(self):
         return self._dict_constructor
+
+    @property
+    def dict_attribut(self):
+        return self._dict_attribut
 
     @property
     def verbose(self):
@@ -104,7 +111,17 @@ class Parser(object):
         return None
 
     # ...
-    def run(self, update_variables=True):
+    def run(self):
+        self.run_single()
+    # ...
+
+    # ...
+    def run_single(self):
+        """
+        runs the process for a single file
+        """
+        update_variables = self.dict_attribut["update_variables"]
+
         source = self.text
 
         if self.verbose > 0:

@@ -22,13 +22,18 @@ def make_test(filename):
     dict_constructor["subroutine"] = SubroutineBlockJorek
     dict_constructor["function"]   = FunctionBlockJorek
 
-    parser = Parser(filename=filename, dict_constructor=dict_constructor,
-                    verbose=1)
-    source = parser.text
+    dict_attribut    = {}
+    dict_attribut["update_variables"] = True
 
-    print (parser.dict_names)
+    parser = Parser(filename=filename, \
+                    dict_constructor=dict_constructor, \
+                    dict_attribut=dict_attribut,
+                    verbose=1)
+
+#    source = parser.text
+#    print (parser.dict_names)
 #    parser.run(update_variables=False)
-    parser.run(update_variables=True)
+    parser.run()
 
 #    print (parser.text)
 
