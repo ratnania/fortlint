@@ -143,7 +143,7 @@ def get_declarations_calls(source):
     dict_calls = {}
     if condition:
         list_code = _re.split(text)
-        for code in list_code:
+#        for code in list_code:
 #            print ">>> ", code
 
 
@@ -175,6 +175,25 @@ def get_declarations_calls(source):
         # ...
         dict_decl["subroutine"] = names_sub
         dict_decl["function"]   = names_fun
+        # ...
+
+        # ...
+        dict_calls["subroutine"] = calls_sub
+        dict_calls["function"]   = calls_fun
+        # ...
+    else:
+        # ... get calls - subroutines
+        calls_sub = get_calls_subroutine(text)
+        # ...
+
+        # ... get calls - functions
+        _calls_fun = get_calls_function(text)
+        calls_fun = [s for s in _calls_fun if s not in calls_sub]
+        # ...
+
+        # ...
+        dict_decl["subroutine"] = []
+        dict_decl["function"]   = []
         # ...
 
         # ...

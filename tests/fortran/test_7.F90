@@ -5,7 +5,7 @@
           implicit none
 
           CALL sub_a1(w,a)
-          CALL sub_a1(w,w,a)
+          CALL sub_b1(w,w,a)
           f = func_a2(a)
 
         contains
@@ -84,9 +84,6 @@
           ! multi Subroutine and Function declarations inside a MODULE 
 
           implicit none
-          CALL sub_b1(w,a)
-          CALL sub_b2(w,w,a)
-          f = func_a2(a)
 
         contains
                 ! ..............................

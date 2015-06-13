@@ -173,8 +173,11 @@ class Block(object):
         """
         """
         self._dict_decl, self._dict_call = get_declarations_calls(self.text)
-        if self.keyword == "module":
-            print ">>>>>>>>>>> MODULE :", self.name
+#        if self.keyword == "module":
+#            print ">>>>>>>>>>> MODULE :", self.name
+        if self.keyword == "subroutine":
+            print ">>>>>>>>>>> SUBROUTINE :", self.name
+            print self.text
             print self.dict_decl
             print self.dict_call
 
@@ -275,6 +278,29 @@ class Block(object):
         # ... add current block if it is a subroutine or a function
         graph = root.graph_call
 
+        dict_call = self.dict_call
+        if self.keyword == "module":
+            condition_sub = True
+            try:
+                condition_sub = (len(self.dict_call["subroutine"]) == 0)
+            except:
+                pass
+
+            condition_fun = True
+            try:
+                condition_fun = (len(self.dict_call["function"]) == 0)
+            except:
+                pass
+
+            condition = condition_sub and condition_fun
+
+            if condition:
+                dict_call = self.dict_decl
+
+        if self.keyword == "subroutine":
+            print "++++++++++++++++++++++++++++++++"
+            print self.name, " ----- " ,dict_call,  self.dict_decl
+
 #        print self.color
         attributs = {}
 #        attributs["constraint"] = "true"
@@ -282,10 +308,7 @@ class Block(object):
         attributs["label"]      = self.label
 
         # ... add edges / nodes for functions/subroutines calls
-        if self.keyword == "module":
-            print "++++++++++++++++++++++++++++++++"
-            print self.name, " ----- " ,self.dict_call
-        for key, values in self.dict_call.items():
+        for key, values in dict_call.items():
             keyword = key
             if self.keyword == "module":
                 print ("key :", key, "values :", values)
