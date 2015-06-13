@@ -175,11 +175,11 @@ class Block(object):
         self._dict_decl, self._dict_call = get_declarations_calls(self.text)
 #        if self.keyword == "module":
 #            print ">>>>>>>>>>> MODULE :", self.name
-        if self.keyword == "subroutine":
-            print ">>>>>>>>>>> SUBROUTINE :", self.name
-            print self.text
-            print self.dict_decl
-            print self.dict_call
+#        if self.keyword == "subroutine":
+#            print ">>>>>>>>>>> SUBROUTINE :", self.name
+#            print self.text
+#            print self.dict_decl
+#            print self.dict_call
 
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
@@ -279,6 +279,7 @@ class Block(object):
         graph = root.graph_call
 
         dict_call = self.dict_call
+        no_call = False
         if self.keyword == "module":
             condition_sub = True
             try:
@@ -292,14 +293,14 @@ class Block(object):
             except:
                 pass
 
-            condition = condition_sub and condition_fun
+            no_call = condition_sub and condition_fun
 
-            if condition:
+            if no_call:
                 dict_call = self.dict_decl
 
-        if self.keyword == "subroutine":
-            print "++++++++++++++++++++++++++++++++"
-            print self.name, " ----- " ,dict_call,  self.dict_decl
+#        if self.keyword == "subroutine":
+#            print "++++++++++++++++++++++++++++++++"
+#            print self.name, " ----- " ,dict_call,  self.dict_decl
 
 #        print self.color
         attributs = {}
@@ -310,8 +311,8 @@ class Block(object):
         # ... add edges / nodes for functions/subroutines calls
         for key, values in dict_call.items():
             keyword = key
-            if self.keyword == "module":
-                print ("key :", key, "values :", values)
+#            if self.keyword == "module":
+#                print ("key :", key, "values :", values)
 
             for name in values:
 #                print ("/// name:", name)
@@ -320,6 +321,8 @@ class Block(object):
                     attributs = {}
 #                    attributs["constraint"] = "true"
                     attributs["style"]      = "solid"
+                    if no_call and (self.keyword == "module"):
+                        attributs["style"]      = "dashed"
 
                     graph.edge(self, other, attributs=attributs)
         # ...

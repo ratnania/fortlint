@@ -1,3 +1,4 @@
 - parse declaration only before contains
 - parse calls only after contains
-  - parse routine/function with no argument
+- parse routine/function with no argument
+  TODO: hased edge when module has no call
