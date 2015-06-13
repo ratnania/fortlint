@@ -121,12 +121,13 @@ class Parser(object):
                 return b
         return None
 
-    def get_block_by_name(self, name):
+    def get_blocks_by_name(self, name):
+        blocks_out = []
         for filename, blocks in self.dict_block.items():
             for b in blocks:
                 if b.name.lower() == name.lower():
-                    return b
-        return None
+                    blocks_out.append(b)
+        return blocks_out
 
     def get_block_by_label(self, label):
         for filename, blocks in self.dict_block.items():

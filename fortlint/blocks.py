@@ -318,6 +318,7 @@ class Block(object):
         graph = root.graph_call
 
         dict_call = self.dict_call
+#        print dict_call
         no_call = False
         if self.keyword == "module":
             condition_sub = True
@@ -355,9 +356,15 @@ class Block(object):
 
             for name in values:
 #                print ("/// name:", name)
-#                other = root.get_block_by_name(name)
-                other = root.get_block_by_filename_name(self.filename, name)
-                if other is not None:
+                if root.dict_attribut['internal_graph_call']:
+                    other = root.get_block_by_filename_name(self.filename, name)
+                    others = []
+                    if other is not None:
+                        others = [other]
+                else:
+                    others = root.get_blocks_by_name(name)
+
+                for other in others:
                     attributs = {}
 #                    attributs["constraint"] = "true"
                     attributs["style"]      = "solid"

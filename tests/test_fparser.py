@@ -23,8 +23,9 @@ def make_test(filename=None, dirname=None):
     dict_constructor["function"]   = FunctionBlockJorek
 
     dict_attribut    = {}
-    dict_attribut["update_variables"] = True
-    dict_attribut["prefix"] = "jorek_"
+    dict_attribut["update_variables"]    = True
+    dict_attribut["prefix"]              = "jorek_"
+    dict_attribut["internal_graph_call"] = True
 
     parser = Parser(filename=filename, \
                     dirname=dirname, \
