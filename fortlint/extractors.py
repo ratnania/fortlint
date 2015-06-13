@@ -152,7 +152,8 @@ def get_declarations_calls(source):
         # ...
 
         # ... get calls - functions
-        calls_fun = get_calls_function(list_code[0])
+        _calls_fun = get_calls_function(list_code[0])
+        calls_fun = [s for s in _calls_fun if s not in calls_sub]
         # ...
 
         # ... put back the other contains

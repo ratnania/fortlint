@@ -269,7 +269,7 @@ class Block(object):
             keyword = key
 
             for name in values:
-#                print ("+++ name:", name)
+#                print ("/// name:", name)
                 other = root.get_block_by_name(name)
 
                 attributs = {}
@@ -294,18 +294,21 @@ class Block(object):
         attributs["label"]      = self.label
 
         # ... add edges / nodes for functions/subroutines calls
+        print "++++++++++++++++++++++++++++++++"
+        print self.dict_call
         for key, values in self.dict_call.items():
             keyword = key
+            print ("key :", key, "values :", values)
 
             for name in values:
-#                print ("+++ name:", name)
+                print ("/// name:", name)
                 other = root.get_block_by_name(name)
+                if other is not None:
+                    attributs = {}
+#                    attributs["constraint"] = "true"
+                    attributs["style"]      = "solid"
 
-                attributs = {}
-#                attributs["constraint"] = "true"
-                attributs["style"]      = "solid"
-
-                graph.edge(self, other, attributs=attributs)
+                    graph.edge(self, other, attributs=attributs)
         # ...
 # ...
 

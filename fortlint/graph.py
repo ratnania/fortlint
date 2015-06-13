@@ -11,6 +11,9 @@ except ImportError:
 # ...
 class Node:
     def __init__(self, key, attributs={}):
+        if key is None:
+            print ("key is None.")
+            raise()
         self._ID  = id(key)
 #        print "*** node created with id:", self.ID, attributs
         self._key = key
@@ -70,7 +73,10 @@ class Node:
             value = None
 
         if value is None:
-            self.set_label(self.key.label)
+            if self.key.label is not None:
+                self.set_label(self.key.label)
+            else:
+                self.set_label(self.key.name)
 
     def init_color(self):
         try:
