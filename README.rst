@@ -23,8 +23,7 @@ Useful documentation ca be found `here <http://graphviz.readthedocs.org/en/lates
 TODO
 ****
 
-- Add plugins for VI and EMACS
-- ...
+.. include:: TODO.rst
 
 Contribution
 ************
