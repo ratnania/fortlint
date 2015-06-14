@@ -179,6 +179,13 @@ class Graph:
                 except:
                     v_attributs["label"] = "" # vertex
 
+                try:
+                    if vertex.keyword == "module":
+                        v_attributs["shape"] = "box"
+                        v_attributs["style"] = "filled"
+                except:
+                    pass
+
                 self.node(vertex, attributs=v_attributs)
 
         self._nodes[vertex_f].addNeighbor(self.nodes[vertex_t], \
