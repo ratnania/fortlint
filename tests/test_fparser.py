@@ -24,7 +24,8 @@ def make_test(filename=None, dirname=None):
 
     dict_attribut    = {}
     dict_attribut["update_variables"]    = True
-    dict_attribut["prefix"]              = "jorek_"
+#    dict_attribut["prefix"]              = "jorek_"
+    dict_attribut["prefix"]              = ""
     dict_attribut["internal_graph_call"] = True
 
     parser = Parser(filename=filename, \

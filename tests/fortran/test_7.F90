@@ -1,7 +1,5 @@
         MODULE mod_a
 
-          ! multi Subroutine and Function declarations inside a MODULE 
-
           implicit none
 
           CALL sub_a1(w,a)
@@ -47,9 +45,9 @@
 
                    CONTAINS
                       ! ..............................
-                      function    func_inner(a)
+                      function    func_inner(alpha)
                       IMPLICIT NONE
-                         INTEGER :: a
+                         INTEGER :: alpha
                          ! LOCAL
 
                          call sub_a2(xx,xx,ii)
@@ -74,14 +72,12 @@
                    RETURN
                 END function func_a2
                 ! ..............................
-R
+
                 ! ..............................
         end MODULE mod_a
 
 
         MODULE mod_b
-
-          ! multi Subroutine and Function declarations inside a MODULE 
 
           implicit none
 

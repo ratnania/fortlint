@@ -232,7 +232,6 @@ class Parser(object):
                 for block in _blocks:
                     block.set_source(source)
                     block.get_code()
-    #                print "////// ", [(v.prefix, v.name) for v in block.variables]
                     if update_variables:
                         block.update_variables()
                     block.update_source()

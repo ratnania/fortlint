@@ -30,11 +30,6 @@ class Variable(object):
 
     @property
     def prefix(self):
-        if self._prefix is None:
-            self.construct_prefix()
-#        print "---"
-#        print self._prefix
-#        print "---"
         return self._prefix
 
     def set_name(self, name):
@@ -47,33 +42,7 @@ class Variable(object):
         self._ctype = ctype
 
     def construct_prefix(self):
-        # ... check if the variable has already a prefix
-        try:
-            prefix = self.name.split('_',1)[0]
-            if len(prefix) in [2,3]:
-                self._name = self.name.split('_')[1]
-        except:
-            pass
-        # ...
-        if self.ctype is None:
-            print ("ctype is None.")
-            raise()
-        prefix = self.ctype
-        if self.is_array:
-            prefix += "p"
-
-        dtype = ""
-        if self.dtype.lower() == "integer":
-            dtype = PREFIX_DECLARATION_TYPE_INTEGER
-        if self.dtype.lower() == "real":
-            dtype = PREFIX_DECLARATION_TYPE_REAL
-        if self.dtype.lower() == "character":
-            dtype = PREFIX_DECLARATION_TYPE_CHARACTER
-        if self.dtype.lower() == "logical":
-            dtype = PREFIX_DECLARATION_TYPE_LOGICAL
-        prefix += dtype
-
-        self._prefix = prefix + "_"
+        self._prefix = ""
 
 
     def __str__(self):

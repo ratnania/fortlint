@@ -26,7 +26,9 @@ def extract_blocks(word, TAG):
 
 # ...
 def extract_signature():
-    pattern ="[^:]*\(.+\)"
+    pattern = r"[^:]*\(.+\)"
+#    pattern ="\(.+\)"
+#    pattern =r"\s*\(\s*.*\)"
 
     word_re = re.compile(pattern, re.I)
     return word_re
@@ -212,6 +214,33 @@ def get_declarations_calls(source):
 
     return dict_decl, dict_calls
 # ...
+
+# ...
+def get_signature_from_text(source):
+    _re = extract_signature()
+    m = _re.match(source)
+    t = m.group(0)
+#    t = _re.findall(source)[0]
+    return t
+# ...
+
+# ...
+def get_arguments_from_text(source):
+    text = source
+    try:
+#        data = [s.strip() for s in source[1:-1].split(',')]
+#        print "++++++++++++++++++++++++++++++++"
+#        print text[:10]
+#        print "++++++++++++++++++++++++++++++++"
+        data = extract_arguments().findall(text.lstrip(), re.I)
+        arguments = [b.rstrip().lstrip() for b in data if len(b) > 0]
+    except:
+        arguments = []
+
+    return arguments
+# ...
+
+
 
 
 

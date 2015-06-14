@@ -46,6 +46,7 @@ class Block(object):
         self._contains    = None
         self._is_valid    = False
         self._filename    = filename
+        self._signature   = None
 
         if color is None:
             self.set_color()
@@ -57,12 +58,14 @@ class Block(object):
             self._prefix_lib = ""
 
         self._re_block     = extract_blocks(self._keyword, TAG)
-        self._re_signature = extract_signature()
-        self._re_arguments = extract_arguments()
 
     @property
     def keyword(self):
         return self._keyword
+
+    @property
+    def signature(self):
+        return self._signature
 
     @property
     def filename(self):
@@ -181,9 +184,13 @@ class Block(object):
             self.get_code()
 
         try:
-            t = self._re_signature.findall(self.text, re.I)[0]
+            t = get_signature_from_text(self.text)
+#            print "ORIGINAL TEXT :", self.text[:10]
+#            print "SIGNATURE     :", t[:10]
         except:
             t = None
+
+        self._signature = t
 
         return t
 
@@ -193,11 +200,8 @@ class Block(object):
         _text = self.get_signature()
         if self.verbose > 0:
             print (">>> signature:", _text)
-        try:
-            data = self._re_arguments.findall(_text, re.I)
-            self._arguments = [b.rstrip() for b in data if len(b) > 0]
-        except:
-            self._arguments = []
+        self._arguments = get_arguments_from_text(_text)
+#        print "ARGUMENTS :", self.name, self._arguments
         return self._arguments
 
     def get_decl_call(self):
@@ -236,7 +240,10 @@ class Block(object):
 
     def update_variables(self):
         for var in self.variables:
+            var.construct_prefix()
+        for var in self.variables:
             self.replace_variable(var)
+#        print "////// ", self.name, [(v.prefix, v.name) for v in self.variables]
 
     def set_color(self):
         if self.keyword == "module":
