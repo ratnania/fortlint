@@ -27,7 +27,6 @@ class VariableJorek(Variable):
 
     def construct_prefix(self):
         # ... check if the variable has already a prefix
-#        print ">>> name :", self.name
         try:
             prefix = self.name.split('_',1)[0]
             if len(prefix) in [2,3]:
@@ -60,8 +59,6 @@ class VariableJorek(Variable):
 
         self._prefix = prefix + "_"
 
-#        print self._prefix
-
     def __str__(self):
         return 'Name={0}, Type={1}'.format(self.name, self.dtype)
 # ...
@@ -76,9 +73,6 @@ class BlockJorek(Block):
 
     def parse_variables(self):
         Block.parse_variables(self, constructor_variable=VariableJorek)
-#        print "---"
-#        print self._arguments
-#        print [v.name for v in self.variables]
 
         # ... arguments
         for var in self._variables:
@@ -119,12 +113,8 @@ class BlockJorek(Block):
             list_code_new.append(code)
 
         self._source = ''.join(list_code_new)
-#        print self.keyword
-#        if self.keyword == "subroutine":
-#            print "XXXXXXXXXXXXXXXXXXXXXXXX"
         if self.verbose > 1:
             print self._source
-#        print self._source
 # ...
 
 # ...

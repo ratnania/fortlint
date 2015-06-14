@@ -7,7 +7,7 @@ from fortlint.extractors import *
 
 
 PRINT = False
-PRINT = True
+#PRINT = True
 
 
 source_subroutine = \
@@ -70,7 +70,7 @@ f = open("fortran/test_6.F90", "r")
 source_test_6 = f.read()
 
 # ...
-def test_extract_subroutine(source):
+def make_extract_subroutine(source):
     keyword = "subroutine"
     _re = extract_blocks(keyword, "my_sub2")
     r = _re.findall(source.lower())
@@ -81,7 +81,7 @@ def test_extract_subroutine(source):
 # ...
 
 # ...
-def test_extract_function(source):
+def make_extract_function(source):
     keyword = "function"
     _re = extract_blocks(keyword, "my_func3")
     r = _re.findall(source.lower())
@@ -92,7 +92,7 @@ def test_extract_function(source):
 # ...
 
 # ...
-def test_extract_module(source):
+def make_extract_module(source):
     keyword = "module"
     _re = extract_blocks(keyword, "my_module4")
     r = _re.findall(source.lower())
@@ -103,7 +103,7 @@ def test_extract_module(source):
 # ...
 
 # ...
-def test_extract_subroutine_call(source):
+def make_extract_subroutine_call(source):
     keyword = "subroutine"
     _re = extract_blocks(keyword, "my_sub2")
     r = _re.findall(source.lower())[0]
@@ -118,7 +118,7 @@ def test_extract_subroutine_call(source):
 # ...
 
 # ...
-def test_extract_module_contains(source):
+def make_extract_module_contains(source):
     keyword = "module"
     _re = extract_blocks(keyword, "my_module4")
     r = _re.findall(source.lower())[0]
@@ -133,7 +133,7 @@ def test_extract_module_contains(source):
 # ...
 
 # ...
-def test_extract_module_contains2(source):
+def make_extract_module_contains2(source):
     keyword = "module"
     _re = extract_blocks(keyword, "my_mod_1")
     source = _re.findall(source.lower())[0]
@@ -148,14 +148,35 @@ def test_extract_module_contains2(source):
 # ...
 
 
+def test_1():
+    make_extract_subroutine(source_subroutine)
+
+def test_2():
+    make_extract_function(source_function)
+
+def test_3():
+    make_extract_module(source_module_1)
+
+def test_4():
+    make_extract_module(source_module_2)
+
+def test_5():
+    make_extract_subroutine_call(source_subroutine)
+
+def test_6():
+    make_extract_module_contains(source_module_2)
+
+def test_7():
+    make_extract_module_contains2(source_test_6)
 
 
 #############################################################################
 if __name__ == "__main__":
-#    test_extract_subroutine(source_subroutine)
-#    test_extract_function(source_function)
-#    test_extract_module(source_module_1)
-#    test_extract_module(source_module_2)
-#    test_extract_subroutine_call(source_subroutine)
-#    test_extract_module_contains(source_module_2)
-    test_extract_module_contains2(source_test_6)
+    test_1()
+    test_2()
+    test_3()
+    test_4()
+    test_5()
+    test_6()
+    test_7()
+

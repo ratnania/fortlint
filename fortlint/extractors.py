@@ -66,10 +66,6 @@ def get_names_function(text_in):
     pattern = r"\b" + keyword + r"\b.*\("
     word_re = re.compile(pattern, re.I)
     text = word_re.findall(text_in.lower(), re.I)
-#    print ">>>>>>>>>>>>>>>>>>"
-#    print text_in
-#    print "---"
-#    print len(text)
     list_names = []
     for t in text:
         list_s = [s for s in t.split(keyword) if len(s) > 0]
@@ -88,7 +84,6 @@ def get_names_module(text_in):
     pattern = r"\b" + keyword + r"\b.*"
     word_re = re.compile(pattern, re.I)
     text = word_re.findall(text_in.lower(), re.I)
-#    print ("+++++ text :", text)
     list_names = []
     for t in text:
         list_s = [s for s in t.split(keyword) if len(s) > 0]
@@ -140,11 +135,6 @@ def extract_contains():
 
 # ...
 def get_declarations_calls(source):
-#    print ("===========================")
-#    print (">>> Enter get_declarations_calls")
-#    print (">>> source ")
-#    print (source)
-
     text = source
 
     _re = extract_contains()
@@ -154,9 +144,6 @@ def get_declarations_calls(source):
     dict_calls = {}
     if condition:
         list_code = _re.split(text)
-#        for code in list_code:
-#            print ">>> ", code
-
 
         # ... get calls - subroutines
         calls_sub = get_calls_subroutine(list_code[0])
@@ -220,7 +207,6 @@ def get_signature_from_text(source):
     _re = extract_signature()
     m = _re.match(source)
     t = m.group(0)
-#    t = _re.findall(source)[0]
     return t
 # ...
 
@@ -228,10 +214,6 @@ def get_signature_from_text(source):
 def get_arguments_from_text(source):
     text = source
     try:
-#        data = [s.strip() for s in source[1:-1].split(',')]
-#        print "++++++++++++++++++++++++++++++++"
-#        print text[:10]
-#        print "++++++++++++++++++++++++++++++++"
         data = extract_arguments().findall(text.lstrip(), re.I)
         arguments = [b.rstrip().lstrip() for b in data if len(b) > 0]
     except:

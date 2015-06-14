@@ -54,14 +54,16 @@ class Parser(object):
 
         if dirname is not None:
             for root, subdirs, files in os.walk(dirname):
-                print "++ searching in ", root
+                if self.verbose > 0:
+                    print "++ searching in ", root
                 if files is not None:
                     for File in files:
                         ext = File.split(".")[-1]
                         if ext in FORTRAN_EXTENSIONS:
                             _filename =  os.path.join(root, File)
 
-                            print "---- filename :", _filename
+                            if self.verbose > 0:
+                                print "---- filename :", _filename
 
                             f = open(_filename, "r")
                             progtext = f.read()
@@ -198,9 +200,6 @@ class Parser(object):
                                             prefix_lib=prefix_lib, \
                                             verbose=self.verbose)
                         block.get_code()
-    #                    print "------------------------"
-    #                    print block.source
-    #                    print "------------------------"
                         if block.is_valid:
                             block.get_signature()
                             block.get_arguments()

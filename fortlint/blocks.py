@@ -159,20 +159,12 @@ class Block(object):
                 if n > 1:
                     self._is_valid = True
 
-#                print "==========================="
-#                for i in range(0,n):
-#                    print ">>>>>", self._re_block.split(self.source)[i]
-#                print n
-#                print "==========================="
-
                 if self.is_valid:
                     try:
                         self._text = self._re_block.findall(self.source, re.I)[0]
                     except:
                         print ("Cannot parse the source code")
-    #                    print (self.source)
                         raise()
-#                print ">>> text:", self.text
             else:
                 print ("you must provide the source code before parsing")
                 raise()
@@ -185,8 +177,6 @@ class Block(object):
 
         try:
             t = get_signature_from_text(self.text)
-#            print "ORIGINAL TEXT :", self.text[:10]
-#            print "SIGNATURE     :", t[:10]
         except:
             t = None
 
@@ -201,20 +191,12 @@ class Block(object):
         if self.verbose > 0:
             print (">>> signature:", _text)
         self._arguments = get_arguments_from_text(_text)
-#        print "ARGUMENTS :", self.name, self._arguments
         return self._arguments
 
     def get_decl_call(self):
         """
         """
         self._dict_decl, self._dict_call = get_declarations_calls(self.text)
-#        if self.keyword == "module":
-#            print ">>>>>>>>>>> MODULE :", self.name
-#        if self.keyword == "subroutine":
-#            print ">>>>>>>>>>> SUBROUTINE :", self.name
-#            print self.text
-#            print self.dict_decl
-#            print self.dict_call
 
     def parse_variables(self, constructor_variable=None):
         if constructor_variable is None:
@@ -244,7 +226,6 @@ class Block(object):
             var.construct_prefix()
         for var in self.variables:
             self.replace_variable(var)
-#        print "////// ", self.name, [(v.prefix, v.name) for v in self.variables]
 
     def set_color(self):
         if self.keyword == "module":
@@ -260,13 +241,8 @@ class Block(object):
         else:
             for key, values in self.dict_decl.items():
                 keyword = key
-#                if self.keyword == "module":
-#                    print "****** ",  key, values
 
                 for name in values:
-#                    if self.keyword == "module":
-#                    print ("+++ name:", name)
-#                    other = root.get_block_by_name(name)
                     other = root.get_block_by_filename_name(self.filename, name)
                     if other is not None:
                         try:
@@ -281,8 +257,6 @@ class Block(object):
                             label_o = ""
 
                         other._label = label_s + " % "+ label_o
-#                    if self.keyword == "module":
-#                    print ("--- new label :", other.label)
 
     def update_graph_decl(self, root):
         if not self.contains:
@@ -292,22 +266,17 @@ class Block(object):
         graph = root.graph_decl
         subgraph   = Digraph(name=self.name)
 
-#        print self.color
         attributs = {}
 #        attributs["constraint"] = "true"
         attributs["constraint"] = "false"
         attributs["style"]      = "solid"
         attributs["label"]      = self.label
 
-#        graph.node(self, attributs=attributs)
-
         # ... add edges / nodes for functions/subroutines declarations
         for key, values in self.dict_decl.items():
             keyword = key
 
             for name in values:
-#                print ("/// name:", name)
-#                other = root.get_block_by_name(name)
                 other = root.get_block_by_filename_name(self.filename, name)
 
                 attributs = {}
@@ -327,7 +296,6 @@ class Block(object):
         graph = root.graph_call
 
         dict_call = self.dict_call
-#        print dict_call
         no_call = False
         if self.keyword == "module":
             condition_sub = True
@@ -347,11 +315,6 @@ class Block(object):
             if no_call:
                 dict_call = self.dict_decl
 
-#        if self.keyword == "subroutine":
-#            print "++++++++++++++++++++++++++++++++"
-#            print self.name, " ----- " ,dict_call,  self.dict_decl
-
-#        print self.color
         attributs = {}
 #        attributs["constraint"] = "true"
         attributs["constraint"] = "false"
@@ -361,11 +324,8 @@ class Block(object):
         # ... add edges / nodes for functions/subroutines calls
         for key, values in dict_call.items():
             keyword = key
-#            if self.keyword == "module":
-#                print ("key :", key, "values :", values)
 
             for name in values:
-#                print ("/// name:", name)
                 if root.dict_attribut['internal_graph_call']:
                     other = root.get_block_by_filename_name(self.filename, name)
                     others = []

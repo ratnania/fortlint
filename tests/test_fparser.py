@@ -24,8 +24,8 @@ def make_test(filename=None, dirname=None):
 
     dict_attribut    = {}
     dict_attribut["update_variables"]    = True
-#    dict_attribut["prefix"]              = "jorek_"
-    dict_attribut["prefix"]              = ""
+    dict_attribut["prefix"]              = "jorek_"
+#    dict_attribut["prefix"]              = ""
     dict_attribut["internal_graph_call"] = True
 
     parser = Parser(filename=filename, \
@@ -75,7 +75,7 @@ def test_dirname():
     dirname = "fortran"
     make_test(dirname=dirname)
 
-def test_input():
+def parse_input():
     import sys
     # -----------------------------------------------
     try:
@@ -101,5 +101,5 @@ if __name__ == "__main__":
 #    test_6()
 #    test_7()
 #    test_dirname()
-    test_input()
+    parse_input()
 
