@@ -96,8 +96,11 @@ class BlockJorek(Block):
         _text = self.text
 
         pattern = r"\b"+ name + r"\b"
-        print ">>> pattern :", pattern
-        _text = re.sub(pattern, var.prefix + name.lower(), _text)
+        try:
+            _text = re.sub(pattern, var.prefix + name.lower(), _text)
+        except:
+            print (">>> pattern :", pattern)
+            raise()
 
         if inline:
             self._text = _text

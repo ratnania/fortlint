@@ -18,13 +18,6 @@ Useful documentation ca be found `here <http://graphviz.readthedocs.org/en/lates
 
 **graphviz** can also be used with `sphinx <http://sphinx-doc.org/ext/graphviz.html>`_
 
-
-
-TODO
-****
-
-.. include:: TODO.rst
-
 Contribution
 ************
 

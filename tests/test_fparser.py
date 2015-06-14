@@ -37,8 +37,8 @@ def make_test(filename=None, dirname=None):
     parser.run()
 
     if GRAPH:
-        parser.graph_decl.render("graph-declarations.gv", view=False)
-        parser.graph_call.render("graph-calls.gv", view=False)
+        parser.graph_decl.render("graph-declarations.dot", view=False)
+        parser.graph_call.render("graph-calls.dot", view=False)
 
     parser.save_files(in_place=False)
 # ...

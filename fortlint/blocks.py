@@ -295,6 +295,7 @@ class Block(object):
 #        print self.color
         attributs = {}
 #        attributs["constraint"] = "true"
+        attributs["constraint"] = "false"
         attributs["style"]      = "solid"
         attributs["label"]      = self.label
 
@@ -353,6 +354,7 @@ class Block(object):
 #        print self.color
         attributs = {}
 #        attributs["constraint"] = "true"
+        attributs["constraint"] = "false"
         attributs["style"]      = "solid"
         attributs["label"]      = self.label
 

@@ -1,3 +1,7 @@
+TODO
+****
+
+- update functions calls only when the called function is a block
 
 - add empty block for external calls
 
