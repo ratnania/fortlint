@@ -5,12 +5,12 @@ import os
 
 # ...
 class Variable(object):
-    def __init__(self, name=None, dtype=None, ctype=None):
+    def __init__(self, name=None, dtype=None, ctype=None, attributs=[]):
         self._name   = name
         self._dtype  = dtype
         self._ctype  = ctype
         self._prefix = None
-        self._is_array = False
+        self._attributs = attributs
 
     @property
     def name(self):
@@ -25,8 +25,12 @@ class Variable(object):
         return self._ctype
 
     @property
+    def attributs(self):
+        return self._attributs
+
+    @property
     def is_array(self):
-        return self._is_array
+        return ("dimension" in self.attributs)
 
     @property
     def prefix(self):
@@ -46,6 +50,10 @@ class Variable(object):
 
 
     def __str__(self):
-        return 'Name={0}, Type={1}'.format(self.name, self.dtype)
+        txt = 'Name={0}, Type={1}'.format(self.name, self.dtype)
+        print self.is_array
+        if self.is_array:
+            txt = 'Name={0}, Type={1}, Array=True'.format(self.name, self.dtype)
+        return txt
 # ...
 

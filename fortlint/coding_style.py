@@ -58,9 +58,6 @@ class VariableJorek(Variable):
         prefix += dtype
 
         self._prefix = prefix + "_"
-
-    def __str__(self):
-        return 'Name={0}, Type={1}'.format(self.name, self.dtype)
 # ...
 
 # ...

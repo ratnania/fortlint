@@ -4,13 +4,14 @@ import re
 import os
 
 # ...
-list_keywords_decs = ['integer', 'real', 'type', 'class']
+list_keywords_decs = ["integer", "real", "logical", "type", "class"]
 
 dict_keywords_re = {}
 for word in list_keywords_decs:
-    pattern ="[ ]*" + word + "[^:]*::\s+(.+)"
+#    pattern = r"[ ]*\b" + word + r"\b\s*::\s*"
+    pattern = r"[ ]*" + word + r"[^:]*::\s*(.+)"
 
-    word_re = re.compile(pattern, re.I)
+    word_re = re.compile(pattern, re.DOTALL | re.I)
     dict_keywords_re[word] = word_re
 # ...
 
