@@ -155,36 +155,6 @@ def make_extract_module_contains2(source):
 # ...
 
 # ...
-def get_declarations_variables(source):
-    _source = source.lower()
-    list_var = []
-    for word in list_keywords_decs:
-        pattern = r"[ ]*" + word + r"[^:]*::\s*(.+)"
-        pattern = r"[ ]*" + word + r"(.*dimension)?.*::\s*(.+)"
-
-        _re = re.compile(pattern,re.I)
-        _vars_name = _re.findall(_source, re.I)
-        print _vars_name
-        try:
-            _vars_arg,_vars_name = zip(*_vars_name)
-        except:
-            _vars_name = [] ; _vars_arg = None
-        print _vars_name, " ---- ",_vars_arg
-#        _vars_name = _re.match(_source).group(-1)
-        if len(_vars_name) > 0:
-            for _vars, _args in zip(_vars_name, _vars_arg):
-                for var_name in _vars.split(','):
-                    args = _args.split(',')
-                    args = [s.strip() for s in args if len(s)>0]
-                    print var_name, " --- ARGS :", args
-                    var = VariableJorek(name=var_name.strip(), \
-                                        dtype=word, \
-                                        attributs=args)
-                    list_var.append(var)
-    return list_var
-# ...
-
-# ...
 def make_extract_subroutine_variables(source):
     list_var = get_declarations_variables(source)
     for var in list_var:

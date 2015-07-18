@@ -202,14 +202,7 @@ class Block(object):
         if constructor_variable is None:
             print ("parse_variables: a constructor must be provided. Received None")
             raise()
-        self._variables = []
-        for keyword in list_keywords_decs:
-            _re = dict_keywords_re[keyword]
-            _vars_name = _re.findall(self.text, re.I)
-            for _vars in _vars_name:
-                for var_name in _vars.split(','):
-                    var = constructor_variable(name=var_name.strip(), dtype=keyword)
-                    self._variables.append(var)
+        self._variables = get_declarations_variables(self.text, constructor_variable)
 
     def replace_variable(self, var, inline=True):
         """

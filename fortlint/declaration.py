@@ -33,6 +33,14 @@ class Variable(object):
         return ("dimension" in self.attributs)
 
     @property
+    def is_target(self):
+        return ("targer" in self.attributs)
+
+    @property
+    def is_pointer(self):
+        return ("pointer" in self.attributs)
+
+    @property
     def prefix(self):
         return self._prefix
 

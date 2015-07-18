@@ -40,6 +40,10 @@ class VariableJorek(Variable):
         prefix = self.ctype
         if self.is_array:
             prefix += "p"
+        if self.is_target:
+            prefix += "t"
+#        if self.is_pointer:
+#            prefix += "ptr"
 
         dtype = ""
         if self.dtype.lower() == "integer":
